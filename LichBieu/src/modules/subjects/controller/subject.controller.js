@@ -32,11 +32,11 @@ const createSubject = async (req, res) => {
     const data = req.body;
     try {
 
-        // const authenData = VerifyToken(jwt);
-        // if (!authenData) throw new NotImplementError(CreateSubjectErrors.AUTH_FAIL);
-        // if (authenData.role !== AccountRole.MANAGER) {
-        //     throw new Unauthorized(CreateSubjectErrors.NO_RIGHT);
-        // }
+        const authenData = VerifyToken(jwt);
+        if (!authenData) throw new NotImplementError(CreateSubjectErrors.AUTH_FAIL);
+        if (authenData.role !== AccountRole.TEACHER) {
+            throw new Unauthorized(CreateSubjectErrors.NO_RIGHT);
+        }
         // const isExisted = await SubjectRepository.getSubject(data.subjectId);
         // if (!isExisted) throw CreateSubjectErrors.SUBJECT_NOT_EXISTED;
         const subject = await SubjectRepository.createSubject(data);
@@ -69,9 +69,9 @@ const getAllSubjects = async (req, res) => {
     try {
         const authenData = VerifyToken(jwt);
         if (!authenData) throw new NotImplementError(GetSubjectsErrors.AUTH_FAIL);
-        if (authenData.role !== AccountRole.MANAGER) {
-            throw new Unauthorized(GetSubjectsErrors.NO_RIGHT);
-        }
+        // if (authenData.role !== AccountRole.MANAGER) {
+        //     throw new Unauthorized(GetSubjectsErrors.NO_RIGHT);
+        // }
         const subjects = await SubjectRepository.getAllSubjects(parseInt(page),parseInt(limit));
         if (!subjects) throw new NotFoundError(GetSubjectsErrors.GET_FAIL);
         return res.onSuccess(subjects);
@@ -90,9 +90,9 @@ const getAllSubjectInputBySubjectId = async (req, res) => {
     try {
         const authenData = VerifyToken(jwt);
         if (!authenData) throw new NotImplementError(GetSubjectsErrors.AUTH_FAIL);
-        if (authenData.role !== AccountRole.MANAGER) {
-            throw new Unauthorized(GetSubjectsErrors.NO_RIGHT);
-        }
+        // if (authenData.role !== AccountRole.MANAGER) {
+        //     throw new Unauthorized(GetSubjectsErrors.NO_RIGHT);
+        // }
         const isExisted = await SubjectRepository.getSubject(data.subjectId);
         if (!isExisted) throw CreateSubjectErrors.SUBJECT_NOT_EXISTED;
         const subjects = await SubjectRepository.getAllSubjectInputBySubjectId(parseInt(page),parseInt(limit),data.subjectId);
@@ -113,9 +113,9 @@ const getSubject = async (req, res) => {
     try {
         const authenData = VerifyToken(jwt);
         if (!authenData) throw new NotImplementError(GetSubjectErrors.AUTH_FAIL);
-        if (authenData.role !== AccountRole.MANAGER) {
-            throw new Unauthorized(GetSubjectErrors.NO_RIGHT);
-        }
+        // if (authenData.role !== AccountRole.MANAGER) {
+        //     throw new Unauthorized(GetSubjectErrors.NO_RIGHT);
+        // }
         const subject = await SubjectRepository.getSubject(subjectId);
         if (!subject) throw new NotFoundError(GetSubjectErrors.GET_FAIL);
         return res.onSuccess(subject);
@@ -131,7 +131,7 @@ const updateSubject = async (req, res) => {
     try {
         const authenData = VerifyToken(jwt);
         if (!authenData) throw new NotImplementError(UpdateSubjectErrors.AUTH_FAIL);
-        if (authenData.role !== AccountRole.MANAGER) {
+        if (authenData.role !== AccountRole.TEACHER) {
             throw new Unauthorized(UpdateSubjectErrors.NO_RIGHT);
         }
         const updated = await SubjectRepository.updateSubject(subjectId, data);
@@ -159,7 +159,7 @@ const blockSubject = async (req, res) => {
     try {
         const authenData = VerifyToken(jwt);
         if (!authenData) throw new NotImplementError(BlockSubjectErrors.AUTH_FAIL);
-        if (authenData.role !== AccountRole.MANAGER) {
+        if (authenData.role !== AccountRole.TEACHER) {
             throw new Unauthorized(BlockSubjectErrors.NO_RIGHT);
         }
         const blocked = await SubjectRepository.blockSubject(subjectId);
