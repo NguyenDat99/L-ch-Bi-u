@@ -7,27 +7,43 @@ import {
 
 
 const SubjectSchema = new Schema({
-    subjectName: {
+    MaHocPhan: {
         type: String,
         required: true
     },
-    avatar: {
+    TenHocPhan: {
         type: String,
+        required: true
     },
-    CourseCredit: {
+    LoaiHocPhan: {
+        type: String,
+        required: true
+    },
+    SoTinChi: {
         type: Number,
         required: true
     },
-    status: {
+    MonTienQuyet: {
+        type: String
+    },
+    MonHocTruoc: {
+        type: String
+    },
+    TrangThaiMonHoc: {
         type: String,
         default: SubjectStatus.ACTIVE,
     },
-    subjectId: {
-        type: String,
-        required: true,
+    YeuCauHocKy:{
+      type: Number
     }
     ,
-    properties: {}
+    MaKhoa: {
+        type: String,
+        required: true,
+        MaChuyenNganh: String
+    }
+    ,
+    thuocTinhPhu: {}
 }, {
     versionKey: false,
     timestamps: true,

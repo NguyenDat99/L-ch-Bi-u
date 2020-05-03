@@ -32,11 +32,11 @@ const createSubject = async (req, res) => {
     const data = req.body;
     try {
 
-        const authenData = VerifyToken(jwt);
-        if (!authenData) throw new NotImplementError(CreateSubjectErrors.AUTH_FAIL);
-        if (authenData.role !== AccountRole.TEACHER) {
-            throw new Unauthorized(CreateSubjectErrors.NO_RIGHT);
-        }
+        // const authenData = VerifyToken(jwt);
+        // if (!authenData) throw new NotImplementError(CreateSubjectErrors.AUTH_FAIL);
+        // if (authenData.role !== AccountRole.TEACHER) {
+        //     throw new Unauthorized(CreateSubjectErrors.NO_RIGHT);
+        // }
         // const isExisted = await SubjectRepository.getSubject(data.subjectId);
         // if (!isExisted) throw CreateSubjectErrors.SUBJECT_NOT_EXISTED;
         const subject = await SubjectRepository.createSubject(data);

@@ -13,7 +13,7 @@ const createSubjectInput = (req, res, next) => {
     const data = req.body;
     try {
         if (!data) throw CreateSubjectErrors.NO_DATA;
-        if (!data.subjectName) throw CreateSubjectErrors.NO_NAME;
+        // if (!data.MaHocPhan) throw CreateSubjectErrors.NO_NAME;
         // if (!data.subjectId) throw CreateSubjectErrors.NO_SUBJECT_ID;
         // if (!Validator.isMongoId(data.subjectId)) throw CreateSubjectErrors.INVALID_SUBJECT_ID;
         // if (!jwt) throw CreateSubjectErrors.NO_TOKEN;
