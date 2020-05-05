@@ -26,6 +26,42 @@ function chiSoToiDaHocKy(subjects){
   });
   return max
 }
+//tyLe DaiCuong/(ChuyenNganh+DaiCuong)
+function kiemTraTyLeMonHoc(array,tyLe,dungSaiChoPhepTyLeMonHoc){
+  var daiCuong = 0
+  var daiCuong2 = 0
+  var chuyenNganh = 0
+  array.forEach((item, i) => {
+    if(item.TheLoaiHocPhan === "Đại Cương")
+        daiCuong +=1
+    else if(item.TheLoaiHocPhan === "Chuyên Ngành")
+        chuyenNganh +=1
+  });
+  var dungSai = 0
+  if(daiCuong>0) dungSai = Math.abs((daiCuong/(daiCuong+chuyenNganh)) - tyLe)
+  if ((dungSaiChoPhepTyLeMonHoc - dungSai ) > 0) return true;
+  else {
+    return false
+  }
+}
+
+
+function kiemTraMonHocTruocVaMonTienQuyet(array,subject,array2){
+  var co = 0
+  array.forEach((item, i) => {
+    if((item.MaHocPhan === subject.MonHocTruoc) || (item.MaHocPhan === subject.MonTienQuyet))
+        co +=1
+  });
+  array2.forEach((item, i) => {
+    if(item.HK === 0)
+    if((item.MaHocPhan === subject.MonHocTruoc) || (item.MaHocPhan === subject.MonTienQuyet))
+        co +=1
+  });
+  console.log(co);
+  if(co <1) return true;
+  return false
+}
+
 
 const createSchedule = async (subjects) => {
   var tmp = []
@@ -83,6 +119,8 @@ index +=1
 const soHocKyToiDa = 6
 const soTinChiToiDa = 21
 const soMonHocToiDa = 10
+const tyLeDaiCuong_ChuyenNganh = 0.8 //tyLe DaiCuong/(ChuyenNganh+DaiCuong)
+const dungSaiChoPhepTyLeMonHoc = 0.4 //dung sai voi tyLe DaiCuong/(ChuyenNganh+DaiCuong)
 //
 const tkb=[]
 var soHK = 0
@@ -91,16 +129,32 @@ while (soHK < soHocKyToiDa) {
   var tkb_moiKy = []
   var s
   tmp.forEach((item, i) => {
+      if((item.HK === 0) && tongSoTC(tkb_moiKy,soTinChiToiDa) && tongSoMon(tkb_moiKy,soMonHocToiDa) &&
+       kiemTraTyLeMonHoc(tkb_moiKy,tyLeDaiCuong_ChuyenNganh,dungSaiChoPhepTyLeMonHoc))
+      {
+        if(kiemTraMonHocTruocVaMonTienQuyet(tkb_moiKy,item,tmp.slice(i+1,tmp.length)))
+        {
+          s = item
+          s.HK = hk
+          tkb_moiKy.push(item)
+        }
+      }
+  });
+  tmp.forEach((item, i) => {
       if((item.HK === 0) && tongSoTC(tkb_moiKy,soTinChiToiDa) && tongSoMon(tkb_moiKy,soMonHocToiDa))
       {
-        s = item
-        s.HK = hk
-        tkb_moiKy.push(item)
+        if(kiemTraMonHocTruocVaMonTienQuyet(tkb_moiKy,item,tmp.slice(i+1,tmp.length)))
+        {
+          s = item
+          s.HK = hk
+          tkb_moiKy.push(item)
+        }
       }
   });
   tkb.push(tkb_moiKy)
   soHK = hk
 }
+// console.log(tkb[5]);
 return tkb
 }
 
