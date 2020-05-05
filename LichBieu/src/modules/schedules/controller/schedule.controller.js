@@ -33,7 +33,7 @@ const createSchedule = async (req, res) => {
     const subjects =  await SubjectController.getAllSubjectsForSchedule(req,res);
     const schedule = await ScheduleRepository.createSchedule(subjects);
     if (!schedule) throw new NotImplementError(CreateScheduleErrors.CREATE_FAIL);
-    return res.onSuccess();
+    return res.onSuccess(schedule);
   } catch (error) {
       return res.onError(error);
   }

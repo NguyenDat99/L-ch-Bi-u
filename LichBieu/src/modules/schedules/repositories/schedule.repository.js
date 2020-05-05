@@ -4,6 +4,28 @@ import {
   ScheduleStatus
 } from '../commons/schedule.status';
 
+function tongSoTC(array,max){
+  var sum = 0
+  array.forEach((item, i) => {
+    sum += item.SoTinChi
+  });
+  if (sum > max) return false
+  return true
+}
+
+function tongSoMon(array,max){
+  if (array.length > max) return false
+  return true
+}
+
+function chiSoToiDaHocKy(subjects){
+  var max = 0
+  subjects.forEach((item, i) => {
+    if(item.HK > max)
+      max = item.HK
+  });
+  return max
+}
 
 const createSchedule = async (subjects) => {
   var tmp = []
@@ -55,10 +77,32 @@ array1.forEach((item, i) => {
 index +=1
 }
 //hoan thanh xap xep index bat dau tao lich dua vao tmp array
+// tong so chi <25 tong so mon < 10
 
-
-
-};
+//chi so dieu chinh
+const soHocKyToiDa = 6
+const soTinChiToiDa = 21
+const soMonHocToiDa = 10
+//
+const tkb=[]
+var soHK = 0
+while (soHK < soHocKyToiDa) {
+  var hk = chiSoToiDaHocKy(tmp) + 1
+  var tkb_moiKy = []
+  var s
+  tmp.forEach((item, i) => {
+      if((item.HK === 0) && tongSoTC(tkb_moiKy,soTinChiToiDa) && tongSoMon(tkb_moiKy,soMonHocToiDa))
+      {
+        s = item
+        s.HK = hk
+        tkb_moiKy.push(item)
+      }
+  });
+  tkb.push(tkb_moiKy)
+  soHK = hk
+}
+return tkb
+}
 
 
 
