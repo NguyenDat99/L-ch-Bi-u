@@ -4,7 +4,7 @@ import AlreadyExistError from '../../../errors-handle/already-exist.errors';
 import NotFoundError from '../../../errors-handle/not-found.errors';
 import ValidationError from '../../../errors-handle/validation.errors';
 import SubjectRepository from '../repositories/subject.repository';
-import AccountRepository from '../../account-module/repositories/account.repository';
+import AccountRepository from '../../accounts/repositories/account.repository';
 import NotImplementError from '../../../errors-handle/not-implemented.errors';
 import Unauthorized from '../../../errors-handle/unauthorized.errors';
 import {
@@ -12,7 +12,7 @@ import {
 } from '../commons/subject.status';
 import {
     AccountRole,
-} from '../../account-module/commons/account-status.common'
+} from '../../accounts/commons/account-status.common'
 // Util
 import { GenerateToken, VerifyToken } from '../../../utils/jwt.util';
 //Commom - Code
@@ -32,28 +32,16 @@ const createSubject = async (req, res) => {
     const data = req.body;
     try {
 
-        // const authenData = VerifyToken(jwt);
-        // if (!authenData) throw new NotImplementError(CreateSubjectErrors.AUTH_FAIL);
-        // if (authenData.role !== AccountRole.TEACHER) {
-        //     throw new Unauthorized(CreateSubjectErrors.NO_RIGHT);
-        // }
-        // const isExisted = await SubjectRepository.getSubject(data.subjectId);
-        // if (!isExisted) throw CreateSubjectErrors.SUBJECT_NOT_EXISTED;
+        const authenData = VerifyToken(jwt);
+        if (!authenData) throw new NotImplementError(CreateSubjectErrors.AUTH_FAIL);
+        if (authenData.role !== AccountRole.TEACHER) {
+            throw new Unauthorized(CreateSubjectErrors.NO_RIGHT);
+        }
+        const isExisted = await SubjectRepository.getSubject(data.MaHocPhan);
+        if (isExisted) throw CreateSubjectErrors.SUBJECT_EXISTED;
         const subject = await SubjectRepository.createSubject(data);
         if (!subject) throw new NotImplementError(CreateSubjectErrors.CREATE_FAIL);
         return res.onSuccess(subject);
-    } catch (error) {
-        return res.onError(error);
-    }
-};
-
-const createSetting = async (req, res) => {
-//    const { jwt } = req.headers;
-    const data = req.body;
-    try {
-        const Setting = await SubjectRepository.createSetting(data);
-        if (!Setting) throw new NotImplementError(CreateSubjectErrors.CREATE_FAIL);
-        return res.onSuccess(Setting);
     } catch (error) {
         return res.onError(error);
     }
@@ -69,7 +57,7 @@ const getAllSubjects = async (req, res) => {
     try {
         const authenData = VerifyToken(jwt);
         if (!authenData) throw new NotImplementError(GetSubjectsErrors.AUTH_FAIL);
-        // if (authenData.role !== AccountRole.MANAGER) {
+        // if (authenData.role !== AccountRole.TEACHER) {
         //     throw new Unauthorized(GetSubjectsErrors.NO_RIGHT);
         // }
         const subjects = await SubjectRepository.getAllSubjects(parseInt(page),parseInt(limit));
@@ -80,7 +68,18 @@ const getAllSubjects = async (req, res) => {
     }
 };
 
-const getAllSubjectInputBySubjectId = async (req, res) => {
+
+const getAllSubjectsForSchedule = async (req,res) => {
+    try {
+        const subjects = await SubjectRepository.getAllSubjectsForSchedule();
+        if (!subjects) throw new NotFoundError(GetSubjectsErrors.GET_FAIL);
+        return subjects;
+    } catch (error) {
+          return error;
+    }
+};
+
+const getAllSubjectInputBy_SoTinChi = async (req, res) => {
     const { jwt } = req.headers;
     let parsedUrl = url.parse(req.url);
     let parsedQs = querystring.parse(parsedUrl.query);
@@ -93,9 +92,7 @@ const getAllSubjectInputBySubjectId = async (req, res) => {
         // if (authenData.role !== AccountRole.MANAGER) {
         //     throw new Unauthorized(GetSubjectsErrors.NO_RIGHT);
         // }
-        const isExisted = await SubjectRepository.getSubject(data.subjectId);
-        if (!isExisted) throw CreateSubjectErrors.SUBJECT_NOT_EXISTED;
-        const subjects = await SubjectRepository.getAllSubjectInputBySubjectId(parseInt(page),parseInt(limit),data.subjectId);
+        const subjects = await SubjectRepository.getAllSubjectInputBy_SoTinChi(parseInt(page),parseInt(limit),data.SoTinChi);
         if (!subjects) throw new NotFoundError(GetSubjectsErrors.GET_FAIL);
         return res.onSuccess(subjects);
     } catch (error) {
@@ -106,7 +103,7 @@ const getAllSubjectInputBySubjectId = async (req, res) => {
 
 const getSubject = async (req, res) => {
     const { jwt } = req.headers;
-    const subjectId = req.params.subjectId;
+    const MaHocPhan = req.params.MaHocPhan;
 
     let parsedUrl = url.parse(req.url);
     let parsedQs = querystring.parse(parsedUrl.query);
@@ -116,7 +113,7 @@ const getSubject = async (req, res) => {
         // if (authenData.role !== AccountRole.MANAGER) {
         //     throw new Unauthorized(GetSubjectErrors.NO_RIGHT);
         // }
-        const subject = await SubjectRepository.getSubject(subjectId);
+        const subject = await SubjectRepository.getSubject(MaHocPhan);
         if (!subject) throw new NotFoundError(GetSubjectErrors.GET_FAIL);
         return res.onSuccess(subject);
     } catch (error) {
@@ -126,7 +123,7 @@ const getSubject = async (req, res) => {
 
 const updateSubject = async (req, res) => {
     const { jwt } = req.headers;
-    const subjectId = req.params.subjectId
+    const MaHocPhan = req.params.MaHocPhan
     const data = req.body;
     try {
         const authenData = VerifyToken(jwt);
@@ -134,7 +131,7 @@ const updateSubject = async (req, res) => {
         if (authenData.role !== AccountRole.TEACHER) {
             throw new Unauthorized(UpdateSubjectErrors.NO_RIGHT);
         }
-        const updated = await SubjectRepository.updateSubject(subjectId, data);
+        const updated = await SubjectRepository.updateSubject(MaHocPhan, data);
         if (updated != true) throw new NotImplementError(UpdateSubjectErrors.UPDATED_FAILURE);
         return res.onSuccess(updated);
     } catch (error) {
@@ -142,27 +139,17 @@ const updateSubject = async (req, res) => {
     }
 };
 
-const updateSetting = async (req, res) => {
-    const data = req.body;
-    try {
-        const updated = await SubjectRepository.updateSetting(data);
-        if (updated != true) throw new NotImplementError(UpdateSubjectErrors.UPDATED_FAILURE);
-        return res.onSuccess(updated);
-    } catch (error) {
-        return res.onError(error);
-    }
-};
 
 const blockSubject = async (req, res) => {
     const { jwt } = req.headers;
-    const subjectId = req.params.subjectId
+    const MaHocPhan = req.params.MaHocPhan
     try {
         const authenData = VerifyToken(jwt);
         if (!authenData) throw new NotImplementError(BlockSubjectErrors.AUTH_FAIL);
         if (authenData.role !== AccountRole.TEACHER) {
             throw new Unauthorized(BlockSubjectErrors.NO_RIGHT);
         }
-        const blocked = await SubjectRepository.blockSubject(subjectId);
+        const blocked = await SubjectRepository.blockSubject(MaHocPhan);
         if (blocked != true) throw new NotImplementError(BlockSubjectErrors.BLOCK_FAIL);
         return res.onSuccess(blocked);
     } catch (error) {
@@ -177,10 +164,10 @@ const getSubjectByFilter = async (req, res) => {
 export default {
     createSubject,
     getAllSubjects,
+    getAllSubjectsForSchedule,
     getSubject,
     updateSubject,
     blockSubject,
     getSubjectByFilter,
-    createSetting,
-    updateSetting
+    getAllSubjectInputBy_SoTinChi
 };

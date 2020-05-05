@@ -1,12 +1,13 @@
 import express from 'express';
-import AccountController from '../modules/account-module/controllers/account.controller';
-import AccountValidate from '../modules/account-module/middleware/account.middleware';
+import AccountController from '../modules/accounts/controllers/account.controller';
+import AccountValidate from '../modules/accounts/middleware/account.middleware';
 
 const router = express.Router();
 
 // Create use routers
 // POST
-router.post('/account/create', AccountValidate.createAccountInput, AccountController.create);
+router.post('/account/create', AccountValidate.createAccountInput, AccountController.create);//role student
+router.post('/account/createBM', AccountValidate.createAccountInputWithRole, AccountController.createWithRole)//role ...
 router.post('/account/login', AccountValidate.logInAccountInput, AccountController.login);
 
 // PUT

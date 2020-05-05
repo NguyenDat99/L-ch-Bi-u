@@ -1,141 +1,59 @@
 import SubjectModel from '../models/subject.models';
-import SettingModel  from '../models/setting.model';
 import {
   SubjectStatus
 } from '../commons/subject.status';
 
 const createSubject = async (data) => {
-  // var maxSizeOfProperties = 5
-  // if (data.maxSizeOfProperties != undefined)
-  //   maxSizeOfProperties = data.maxSizeOfProperties
-  // var keyCount = 0
-  // Object.keys(data.properties).forEach(key => {
-  //   if (data.properties[key].status == "ACTIVE")
-  //     keyCount += 1
-  // })
-  // if (keyCount > maxSizeOfProperties) return NaN
-  console.log(data);
   const result = await SubjectModel.create(data);
   return result;
 };
 
-const createSetting = async (data) => {
-  const result = await SettingModel.create(data);
-  return result;
-}
 
-const getSubject = async (_id) => {
-  var setting = (await SettingModel.findOne()).properties
+const getSubject = async (MaHocPhan) => {
   var subject = await SubjectModel.findOne({
-    _id,
+    MaHocPhan,
     status: SubjectStatus.ACTIVE
   });
-  //xu ly setting
-  Object.keys(subject.properties).forEach(SubjectKey => {
-    if (setting != undefined) {
-        var co = 0
-          setting.forEach(SettingKey => {
-            if(SubjectKey == SettingKey )
-             {
-               co = 1;
-             }
-          })
-      if (co == 0) {
-        delete subject.properties[SubjectKey]
-      }
-    }
-  })
 return subject
 };
+
+
 const getAllSubjects = async (page, limit) => {
-  //chuyen thanh mang tu setting
-  // var tmp = {}
-  // if (setting != undefined)
-  //   tmp = setting.split(",")
-  // lay du lieu
-
-  var setting = (await SettingModel.findOne()).properties
-
   var subjects = await SubjectModel
     .find({
-      status: SubjectStatus.ACTIVE
+      TrangThaiMonHoc: SubjectStatus.ACTIVE
     })
-    .where('_id')
     .limit(limit)
     .skip(limit * page);
+  return subjects;
+};
 
-  //forEach
-  subjects.forEach(forEachFunc)
-  function forEachFunc(subject, index) {
-    if (subject.properties != undefined)
-      //xu ly trong properties
-      Object.keys(subject.properties).forEach(SubjectKey => {
-        if (setting != undefined) {
-            var co = 0
-              setting.forEach(SettingKey => {
-                if(SubjectKey == SettingKey )
-                 {
-                   co = 1;
-                 }
-              })
-          if (co == 0) {
-            delete subject.properties[SubjectKey]
-          }
-        }
-      })
-  }
+const getAllSubjectsForSchedule = async () => {
+  var subjects = await SubjectModel
+    .find({
+      TrangThaiMonHoc: SubjectStatus.ACTIVE
+    })
   return subjects;
 };
 
 
-const getAllSubjectInputBySubjectId = async (page, limit, SubjectId) => {
+const getAllSubjectInputBy_SoTinChi= async (page, limit, SoTinChi) => {
     var setting = (await SettingModel.findOne()).properties
   var subjects = await SubjectModel
     .find({
       status: SubjectStatus.ACTIVE,
-      SubjectId: SubjectId
+      SoTinChi: SoTinChi
     })
-    .where('_id')
     .limit(limit)
     .skip(limit * page);
-    //forEach
-    subjects.forEach(forEachFunc)
-    function forEachFunc(subject, index) {
-      if (subject.properties != undefined)
-        //xu ly trong properties
-        Object.keys(subject.properties).forEach(SubjectKey => {
-          if (setting != undefined) {
-              var co = 0
-                setting.forEach(SettingKey => {
-                  if(SubjectKey == SettingKey )
-                   {
-                     co = 1;
-                   }
-                })
-            if (co == 0) {
-              delete subject.properties[SubjectKey]
-            }
-          }
-        })
-    }
     return subjects;
 };
 
-const updateSetting = async (data) => {
-  var _id = (await SettingModel.findOne().where('_id'))._id
-  const result = await SettingModel.updateOne({
-    _id
-  }, {
-    ...data
-  });
-  if (result.n === result.nModified) return true;
-  return false;
-}
 
-const updateSubject = async (_id, data) => {
+const updateSubject = async (MaHocPhan, data) => {
   var newData = (await SubjectModel
     .findOne({
-      _id,
+      MaHocPhan,
       status: SubjectStatus.ACTIVE
     }))
   var newAtt = []
@@ -164,41 +82,12 @@ const updateSubject = async (_id, data) => {
   if (data.properties != undefined && newData.properties != undefined)
     data.properties = newData.properties
 
-  //xu ly maxSizeOfProperties
-  // var maxSizeOfProperties = (await SubjectModel
-  //     .findOne({
-  //       _id,
-  //       status: SubjectStatus.ACTIVE
-  //     }))
-  //   .maxSizeOfProperties;
-  // if (data.maxSizeOfProperties != undefined) {
-  //   maxSizeOfProperties = data.maxSizeOfProperties
-  // }
-  // var keyCount = 0
-  // if (data.properties != undefined)
-  //   Object.keys(data.properties).forEach(key => {
-  //     if (data.properties[key].status == "ACTIVE")
-  //       keyCount += 1
-  //   })
-  // if (keyCount > maxSizeOfProperties) return NaN
-
   const result = await SubjectModel.updateOne({
-    _id,
+    MaHocPhan,
     status: SubjectStatus.ACTIVE
   }, {
     ...data
   });
-  // //cap nhat lai maxSizeOfProperties cho toan bo
-  // var dt = await SubjectModel
-  //   .find()
-  // dt.forEach(forEachFunc)
-  //
-  // function forEachFunc(item, index) {
-  //   if (item.maxSizeOfProperties != undefined)
-  //     item.maxSizeOfProperties = maxSizeOfProperties
-  //   item.save
-  // }
-  //kiem tra cap nhat
   if (result.n === result.nModified) return true;
   return false;
 };
@@ -219,9 +108,9 @@ const getSubjectsByFilter = async (filters) => {
 };
 
 
-const blockSubject = async (_id) => {
+const blockSubject = async (MaHocPhan) => {
   const result = await SubjectModel.updateOne({
-    _id,
+    MaHocPhan,
     status: SubjectStatus.ACTIVE
   }, {
     status: SubjectStatus.UNACTIVE
@@ -234,10 +123,9 @@ export default {
   createSubject,
   getSubject,
   getAllSubjects,
+  getAllSubjectsForSchedule,
   updateSubject,
   convertArrayToString,
   getSubjectsByFilter,
-  blockSubject,
-  createSetting,
-  updateSetting
+  blockSubject
 };

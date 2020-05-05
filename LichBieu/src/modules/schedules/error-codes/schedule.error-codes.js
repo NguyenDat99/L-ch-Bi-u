@@ -1,32 +1,25 @@
-export const CreateSubjectErrors = {
+export const CreateScheduleErrors = {
     AUTH_FAIL: 'AUTH_FAIL',
     NO_RIGHT: 'NO_RIGHT',
     NO_DATA: 'NO_DATA',
     NO_TOKEN: 'NO_TOKEN',
     NO_NAME: 'NO_NAME',
     NO_AVATAR: 'NO_AVATAR',
-    NO_SUBJECT_ID: 'NO_SUBJECT_ID',
-    INVALID_SUBJECT_ID: 'INVALID_SUBJECT_ID',
-    SUBJECT_NOT_EXISTED: 'SUBJECT_NOT_EXISTED',
-    SUBJECT_EXISTED:'SUBJECT_EXISTED'
-    ,
+    NO_SCHEDULE_ID: 'NO_SCHEDULE_ID',
+    INVALID_SCHEDULE_ID: 'INVALID_SCHEDULE_ID',
+    SCHEDULE_NOT_EXISTED: 'SCHEDULE_NOT_EXISTED',
     NO_PRICE: 'NO_PRICE',
     CREATE_FAIL: 'CREATE_FAIL',
-    NO_MAHOCPHAN:'NO_MaHocPhan',
-    NO_TENHOCPHAN:'NO_TenHocPhan',
-    NO_LOAIHOCPHAN:'NO_LoaiHocPhan',
-    NO_THELOAIHOCPHAN:'NO_TheLoaiHocPhan',
-    NO_SOTINCHI:'NO_SoTinChi'
 }
 
-export const GetSubjectsErrors = {
+export const GetSchedulesErrors = {
     NO_TOKEN: 'NO_TOKEN',
     GET_FAIL: 'GET_FAIL',
     AUTH_FAIL: 'AUTH_FAIL',
     NO_RIGHT: 'NO_RIGHT',
 }
 
-export const GetSubjectErrors = {
+export const GetScheduleErrors = {
     NO_TOKEN: 'NO_TOKEN',
     GET_FAIL: 'GET_FAIL',
     NO_PRODUCT_ID: 'NO_PRODUCT_ID',
@@ -35,7 +28,7 @@ export const GetSubjectErrors = {
     NO_RIGHT: 'NO_RIGHT',
 }
 
-export const UpdateSubjectErrors = {
+export const UpdateScheduleErrors = {
     NO_DATA: 'NO_DATA',
     NO_TOKEN: 'NO_TOKEN',
     UPDATE_FAIL: 'UPDATE_FAIL',
@@ -45,7 +38,7 @@ export const UpdateSubjectErrors = {
     NO_RIGHT: 'NO_RIGHT',
     UPDATED_FAILURE: 'UPDATED_FAILURE',
 }
-export const BlockSubjectErrors = {
+export const BlockScheduleErrors = {
     NO_TOKEN: 'NO_TOKEN',
     BLOCK_FAIL: 'BLOCK_FAIL',
     NO_PRODUCT_ID: 'NO_PRODUCT_ID',

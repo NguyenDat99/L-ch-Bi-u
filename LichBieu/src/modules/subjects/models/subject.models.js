@@ -19,6 +19,10 @@ const SubjectSchema = new Schema({
         type: String,
         required: true
     },
+    TheLoaiHocPhan: {
+        type: String,
+        required: true
+    },
     SoTinChi: {
         type: Number,
         required: true

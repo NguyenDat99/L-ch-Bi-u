@@ -13,10 +13,13 @@ const createSubjectInput = (req, res, next) => {
     const data = req.body;
     try {
         if (!data) throw CreateSubjectErrors.NO_DATA;
-        // if (!data.MaHocPhan) throw CreateSubjectErrors.NO_NAME;
-        // if (!data.subjectId) throw CreateSubjectErrors.NO_SUBJECT_ID;
-        // if (!Validator.isMongoId(data.subjectId)) throw CreateSubjectErrors.INVALID_SUBJECT_ID;
-        // if (!jwt) throw CreateSubjectErrors.NO_TOKEN;
+        if (!data.MaHocPhan) throw CreateSubjectErrors.NO_MAHOCPHAN;
+        if (!data.TenHocPhan) throw CreateSubjectErrors.NO_TENHOCPHAN;
+        if (!data.TenHocPhan) throw CreateSubjectErrors.NO_TENHOCPHAN;
+        if (!data.LoaiHocPhan) throw CreateSubjectErrors.NO_LOAIHOCPHAN;
+        if (!data.TheLoaiHocPhan) throw CreateSubjectErrors.NO_THELOAIHOCPHAN;
+        if (!data.SoTinChi) throw CreateSubjectErrors.NO_SOTINCHI;
+        if (!jwt) throw CreateSubjectErrors.NO_TOKEN;
         return next();
     } catch (error) {
         return res.onError(new ValidationError(error));
@@ -26,20 +29,19 @@ const createSubjectInput = (req, res, next) => {
 const getAllSubjectInput = (req, res, next) => {
     const { jwt } = req.headers;
     try {
-        //if (!jwt) throw GetSubjectsErrors.NO_TOKEN;
+      if (!jwt) throw GetSubjectsErrors.NO_TOKEN;
         return next();
     } catch (error) {
         return res.onError(new ValidationError(error));
     }
 };
 
-const getAllSubjectInputBySubjectId = (req, res, next) => {
+const getAllSubjectInputBy_SoTinChi = (req, res, next) => {
     const { jwt } = req.headers;
     const data = req.body;
     try {
         if (!jwt) throw GetSubjectsErrors.NO_TOKEN;
-        if (!data.subjectId) throw CreateSubjectErrors.NO_SUBJECT_ID;
-        if (!Validator.isMongoId(data.subjectId)) throw CreateSubjectErrors.INVALID_SUBJECT_ID;
+        if (!data.SoTinChi) throw CreateSubjectErrors.NO_SOTINCHI;
         return next();
     } catch (error) {
         return res.onError(new ValidationError(error));
@@ -51,8 +53,7 @@ const getSubjectInput = (req, res, next) => {
     const subjectId = req.params.subjectId;
     try {
         if (!jwt) throw GetSubjectErrors.NO_TOKEN;
-        if (!subjectId) throw GetSubjectErrors.NO_PRODUCT_ID;
-        if (!Validator.isMongoId(subjectId)) throw GetSubjectErrors.INVALID_PRODUCT_ID;
+        if (!data.MaHocPhan) throw CreateSubjectErrors.NO_MAHOCPHAN;
         return next();
     } catch (error) {
         return res.onError(new ValidationError(error));
@@ -66,8 +67,7 @@ const updateSubjectInput = (req, res, next) => {
     try {
         if (!data) throw UpdateSubjectErrors.NO_DATA;
         if (!jwt) throw UpdateSubjectErrors.NO_TOKEN;
-        if (!subjectId) throw UpdateSubjectErrors.NO_PRODUCT_ID;
-        if (!Validator.isMongoId(subjectId)) throw UpdateSubjectErrors.INVALID_PRODUCT_ID;
+        if (!data.MaHocPhan) throw CreateSubjectErrors.NO_MAHOCPHAN;
         return next();
     } catch (error) {
         return res.onError(new ValidationError(error));
@@ -78,8 +78,7 @@ const blockSubjectInput = (req, res, next) => {
     const subjectId = req.params.subjectId;
     try {
         if (!jwt) throw BlockSubjectErrors.NO_TOKEN;
-        if (!subjectId) throw BlockSubjectErrors.NO_PRODUCT_ID;
-        if (!Validator.isMongoId(subjectId)) throw BlockSubjectErrors.INVALID_PRODUCT_ID;
+        if (!data.MaHocPhan) throw CreateSubjectErrors.NO_MAHOCPHAN;
         return next();
     } catch (error) {
         return res.onError(new ValidationError(error));
@@ -91,5 +90,5 @@ export default {
     getSubjectInput,
     updateSubjectInput,
     blockSubjectInput,
-    getAllSubjectInputBySubjectId
+    getAllSubjectInputBy_SoTinChi
 };
