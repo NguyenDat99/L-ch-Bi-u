@@ -7,12 +7,9 @@ import {
 
 
 const ScheduleSchema = new Schema({
-    HocKy:{
-      type: Number,
-      required: true
-    },
-    DanhSachMonHoc: {}
-}, {
+Ds:{}
+},
+ {
     versionKey: false,
     timestamps: true,
 });

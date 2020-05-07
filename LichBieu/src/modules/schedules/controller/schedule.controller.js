@@ -29,9 +29,10 @@ const url = require('url');
 const querystring = require('querystring');
 //
 const createSchedule = async (req, res) => {
+  const data = req.body;
   try {
     const subjects =  await SubjectController.getAllSubjectsForSchedule(req,res);
-    const schedule = await ScheduleRepository.createSchedule(subjects);
+    const schedule = await ScheduleRepository.createSchedule(subjects,data);
     if (!schedule) throw new NotImplementError(CreateScheduleErrors.CREATE_FAIL);
     return res.onSuccess(schedule);
   } catch (error) {

@@ -49,21 +49,36 @@ function kiemTraTyLeMonHoc(array,tyLe,dungSaiChoPhepTyLeMonHoc){
 function kiemTraMonHocTruocVaMonTienQuyet(array,subject,array2){
   var co = 0
   array.forEach((item, i) => {
-    if((item.MaHocPhan === subject.MonHocTruoc) || (item.MaHocPhan === subject.MonTienQuyet))
+    if(((item.MaHocPhan === subject.MonHocTruoc)&& (subject.MonHocTruoc !==undefined)) ||
+    ((item.MaHocPhan === subject.MonTienQuyet)&& (subject.MonTienQuyet !==undefined)))
         co +=1
   });
   array2.forEach((item, i) => {
-    if(item.HK === 0)
-    if((item.MaHocPhan === subject.MonHocTruoc) || (item.MaHocPhan === subject.MonTienQuyet))
-        co +=1
+    if((((item.MaHocPhan === subject.MonHocTruoc)&& (subject.MonHocTruoc !==undefined)) ||
+    ((item.MaHocPhan === subject.MonTienQuyet)&& (subject.MonTienQuyet !==undefined)))
+    && item.HK === 0)
+          {
+            co +=1
+            console.log("sub: " + subject.MonHocTruoc);
+          }
   });
-  console.log(co);
+  // console.log("sub: " + subject.MonHocTruoc);
+  // console.log(co);
+  //console.log(array2.length);
   if(co <1) return true;
   return false
 }
 
 
-const createSchedule = async (subjects) => {
+const createSchedule = async (subjects,data) => {
+  //chi so dieu chinh
+  const soHocKyToiDa = typeof data.soHocKyToiDa !== 'undefined' ? data.soHocKyToiDa : 6
+  const tongSoTinChiDaoTao = typeof data.tongSoTinChiDaoTao !== 'undefined' ? (data.tongSoTinChiDaoTao - 10) : (154 - 10)
+  const soTinChiToiDa = Math.ceil(tongSoTinChiDaoTao/(soHocKyToiDa-1))
+  const soMonHocToiDa =  typeof data.soMonHocToiDa !== 'undefined' ? data.soMonHocToiDa: 10
+  const tyLeDaiCuong_ChuyenNganh = typeof data.tyLeDaiCuong_ChuyenNganh !== 'undefined' ? data.tyLeDaiCuong_ChuyenNganh : 0.8//tyLe DaiCuong/(ChuyenNganh+DaiCuong)
+  const dungSaiChoPhepTyLeMonHoc = typeof data.dungSaiChoPhepTyLeMonHoc !== 'undefined' ? data.dungSaiChoPhepTyLeMonHoc : 0.2//dung sai voi tyLe DaiCuong/(ChuyenNganh+DaiCuong)
+  ////////////////////
   var tmp = []
   var index = 1
   var subjects2 = []
@@ -114,25 +129,25 @@ index +=1
 }
 //hoan thanh xap xep index bat dau tao lich dua vao tmp array
 // tong so chi <25 tong so mon < 10
-
-//chi so dieu chinh
-const soHocKyToiDa = 6
-const soTinChiToiDa = 21
-const soMonHocToiDa = 10
-const tyLeDaiCuong_ChuyenNganh = 0.8 //tyLe DaiCuong/(ChuyenNganh+DaiCuong)
-const dungSaiChoPhepTyLeMonHoc = 0.4 //dung sai voi tyLe DaiCuong/(ChuyenNganh+DaiCuong)
 //
 const tkb=[]
 var soHK = 0
 while (soHK < soHocKyToiDa) {
   var hk = chiSoToiDaHocKy(tmp) + 1
   var tkb_moiKy = []
+  var tkb_moiKy2 = []
   var s
   tmp.forEach((item, i) => {
-      if((item.HK === 0) && tongSoTC(tkb_moiKy,soTinChiToiDa) && tongSoMon(tkb_moiKy,soMonHocToiDa) &&
+    if((item.YeuCauHocKy!== undefined) && (hk === item.YeuCauHocKy))
+    {
+      s = item
+      s.HK = hk
+      tkb_moiKy.push(item)
+    }
+    else if((item.HK === 0) && tongSoTC(tkb_moiKy,soTinChiToiDa) && tongSoMon(tkb_moiKy,soMonHocToiDa) &&
        kiemTraTyLeMonHoc(tkb_moiKy,tyLeDaiCuong_ChuyenNganh,dungSaiChoPhepTyLeMonHoc))
       {
-        if(kiemTraMonHocTruocVaMonTienQuyet(tkb_moiKy,item,tmp.slice(i+1,tmp.length)))
+        if(kiemTraMonHocTruocVaMonTienQuyet(tkb_moiKy,item,tmp))//tmp.slice(i+1,tmp.length)))
         {
           s = item
           s.HK = hk
@@ -143,7 +158,7 @@ while (soHK < soHocKyToiDa) {
   tmp.forEach((item, i) => {
       if((item.HK === 0) && tongSoTC(tkb_moiKy,soTinChiToiDa) && tongSoMon(tkb_moiKy,soMonHocToiDa))
       {
-        if(kiemTraMonHocTruocVaMonTienQuyet(tkb_moiKy,item,tmp.slice(i+1,tmp.length)))
+        if(kiemTraMonHocTruocVaMonTienQuyet(tkb_moiKy,item,tmp))//tmp.slice(i+1,tmp.length)))
         {
           s = item
           s.HK = hk
@@ -151,10 +166,21 @@ while (soHK < soHocKyToiDa) {
         }
       }
   });
-  tkb.push(tkb_moiKy)
+//  console.log(tkb_moiKy);
+tkb_moiKy.forEach((item, i) => {
+    if(item.HK === hk)
+    {
+      tkb_moiKy2.push(item)
+    }
+});
+
+  tkb.push(tkb_moiKy2)
   soHK = hk
 }
-// console.log(tkb[5]);
+
+// console.log(tmp[3]);
+//console.log(tkb[0]);
+// const result = await ScheduleModel.create(tkb[0]);
 return tkb
 }
 
