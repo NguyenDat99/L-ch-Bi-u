@@ -27,7 +27,7 @@ function chiSoToiDaHocKy(subjects){
   return max
 }
 //tyLe DaiCuong/(ChuyenNganh+DaiCuong)
-function kiemTraTyLeMonHoc(array,tyLe,dungSaiChoPhepTyLeMonHoc){
+function kiemTraTyLeMonHocTheoSoMonHoc(array,tyLe,dungSaiChoPhepTyLeMonHoc){
   var daiCuong = 0
   var daiCuong2 = 0
   var chuyenNganh = 0
@@ -45,6 +45,55 @@ function kiemTraTyLeMonHoc(array,tyLe,dungSaiChoPhepTyLeMonHoc){
   }
 }
 
+//tyLe tcDaiCuong/(tcChuyenNganh+tcDaiCuong)
+function kiemTraTyLeMonHocTheoSoTinChi(array,tyLe,dungSaiChoPhepTyLeMonHoc){
+  var daiCuong = 0
+  var daiCuong2 = 0
+  var chuyenNganh = 0
+  array.forEach((item, i) => {
+    if(item.TheLoaiHocPhan === "Đại Cương")
+        daiCuong += item.SoTinChi
+    else if(item.TheLoaiHocPhan === "Chuyên Ngành")
+        chuyenNganh +=item.SoTinChi
+  });
+  var dungSai = 0
+  if(daiCuong>0) dungSai = Math.abs((daiCuong/(daiCuong+chuyenNganh)) - tyLe)
+  if ((dungSaiChoPhepTyLeMonHoc - dungSai ) > 0) return true;
+  else {
+    return false
+  }
+}
+function uTienMonHocTruoc(tkb_HKTruoc,monHoc,tongMonHoc){
+  var co = 0
+  tkb_HKTruoc.forEach((item, i) => {
+    if((((item.MaHocPhan === monHoc.MonHocTruoc)&& (monHoc.MonHocTruoc !==undefined)) ||
+    ((item.MaHocPhan === monHoc.MonTienQuyet)&& (monHoc.MonTienQuyet !==undefined))) &&
+    (monHoc.TheLoaiHocPhan === "Đại Cương"))
+    {
+      return true
+    }
+  });
+  tkb_HKTruoc.forEach((item, i) => {
+    if(((item.MaHocPhan === monHoc.MonHocTruoc)&& (monHoc.MonHocTruoc !==undefined)) ||
+    ((item.MaHocPhan === monHoc.MonTienQuyet)&& (monHoc.MonTienQuyet !==undefined)))
+    {
+      return true
+    }
+  });
+  tongMonHoc.forEach((monChuaHoc, i1) => {
+    tkb_HKTruoc.forEach((monHocTruoc, i2) => {
+        if((monChuaHoc.HK === 0) &&
+        (((monHocTruoc.MaHocPhan === monChuaHoc.MonHocTruoc)&& (monChuaHoc.MonHocTruoc !==undefined)) ||
+        ((monHocTruoc.MaHocPhan === monChuaHoc.MonTienQuyet)&& (monChuaHoc.MonTienQuyet !==undefined))))
+            co += 1
+    });
+  });
+            //console.log(tkb_HKTruoc);
+//console.log(co);
+if(co > 0) return false
+else return true
+}
+
 
 function kiemTraMonHocTruocVaMonTienQuyet(array,subject,array2){
   var co = 0
@@ -59,24 +108,63 @@ function kiemTraMonHocTruocVaMonTienQuyet(array,subject,array2){
     && item.HK === 0)
           {
             co +=1
-            console.log("sub: " + subject.MonHocTruoc);
+            // console.log("sub: " + subject.MonHocTruoc);
           }
   });
-  // console.log("sub: " + subject.MonHocTruoc);
-  // console.log(co);
-  //console.log(array2.length);
   if(co <1) return true;
   return false
 }
 
+function danhSachMonHocLuaChon(tkb_HKTruoc,tongMonHoc,soTCToiDa,soMonToiDa)
+{
+//   const danhSachMonHoc = []
+//   const tkb_kyNay = []
+//   var tongTC = 0
+//   if (tkb_HKTruoc.length >0)
+// {  tkb_HKTruoc.forEach((monDaHoc, i1) => {
+//     tongSoMon.forEach((monChuaHoc, i2) => {
+//       if((((monDaHoc.MaHocPhan === monChuaHoc.MonHocTruoc)&& (monChuaHoc.MonHocTruoc !==undefined)) ||
+//       ((monDaHoc.MaHocPhan === monChuaHoc.MonTienQuyet)&& (monChuaHoc.MonTienQuyet !==undefined))) &&
+//       (monHoc.HK === 0))
+//           {
+//             danhSachMonHoc.push(monChuaHoc)
+//             tongTC += monChuaHoc.SoTinChi
+//           }
+//     });
+//   });
+// }
+// else {
+// tongSoMon.forEach((monHoc, i) => {
+//   if((i<tongSoMon+1) && (tongTC<tongSoTC+5))
+//   {
+//       danhSachMonHoc.push(monHoc)
+//       tongTC += monChuaHoc.SoTinChi
+//   }
+// });
+// }
+// if(tongTC > soTCToiDa || danhSachMonHoc.length > soMonToiDa)
+// {
+//   danhSachMonHoc.forEach((monHoc, i) => {
+//     if( tongSoTC(tkb_kyNay,soTCToiDa) &&
+//         tongSoMon(tkb_kyNay,soMonToiDa))
+//         tkb_kyNay.push(monHoc)
+//   });
+// }
+// else {
+//     tongSoMon.forEach((monHoc, i) => {
+//       if(monHoc.HK === 0)
+//           danhSachMonHoc.push(monHoc)
+//     });
+// }
+}
 
 const createSchedule = async (subjects,data) => {
   //chi so dieu chinh
   const soHocKyToiDa = typeof data.soHocKyToiDa !== 'undefined' ? data.soHocKyToiDa : 6
   const tongSoTinChiDaoTao = typeof data.tongSoTinChiDaoTao !== 'undefined' ? (data.tongSoTinChiDaoTao - 10) : (154 - 10)
   const soTinChiToiDa = Math.ceil(tongSoTinChiDaoTao/(soHocKyToiDa-1))
-  const soMonHocToiDa =  typeof data.soMonHocToiDa !== 'undefined' ? data.soMonHocToiDa: 10
-  const tyLeDaiCuong_ChuyenNganh = typeof data.tyLeDaiCuong_ChuyenNganh !== 'undefined' ? data.tyLeDaiCuong_ChuyenNganh : 0.8//tyLe DaiCuong/(ChuyenNganh+DaiCuong)
+  const soMonHocToiDa =  typeof data.soMonHocToiDa !== 'undefined' ? data.soMonHocToiDa: 8
+  const tyLeDaiCuong_ChuyenNganh = typeof data.tyLeDaiCuong_ChuyenNganh !== 'undefined' ? data.tyLeDaiCuong_ChuyenNganh : 0.9//tyLe DaiCuong/(ChuyenNganh+DaiCuong)
   const dungSaiChoPhepTyLeMonHoc = typeof data.dungSaiChoPhepTyLeMonHoc !== 'undefined' ? data.dungSaiChoPhepTyLeMonHoc : 0.2//dung sai voi tyLe DaiCuong/(ChuyenNganh+DaiCuong)
   ////////////////////
   var tmp = []
@@ -135,52 +223,43 @@ var soHK = 0
 while (soHK < soHocKyToiDa) {
   var hk = chiSoToiDaHocKy(tmp) + 1
   var tkb_moiKy = []
-  var tkb_moiKy2 = []
   var s
   tmp.forEach((item, i) => {
-    if((item.YeuCauHocKy!== undefined) && (hk === item.YeuCauHocKy))
+    if((item.YeuCauHocKy!== undefined) &&
+    (hk === item.YeuCauHocKy))
     {
       s = item
       s.HK = hk
       tkb_moiKy.push(item)
     }
-    else if((item.HK === 0) && tongSoTC(tkb_moiKy,soTinChiToiDa) && tongSoMon(tkb_moiKy,soMonHocToiDa) &&
-       kiemTraTyLeMonHoc(tkb_moiKy,tyLeDaiCuong_ChuyenNganh,dungSaiChoPhepTyLeMonHoc))
-      {
-        if(kiemTraMonHocTruocVaMonTienQuyet(tkb_moiKy,item,tmp))//tmp.slice(i+1,tmp.length)))
+    else if((item.HK === 0) &&
+       tongSoTC(tkb_moiKy,soTinChiToiDa) &&
+       tongSoMon(tkb_moiKy,soMonHocToiDa) &&
+       kiemTraTyLeMonHocTheoSoMonHoc(tkb_moiKy,tyLeDaiCuong_ChuyenNganh,dungSaiChoPhepTyLeMonHoc) &&
+       kiemTraMonHocTruocVaMonTienQuyet(tkb_moiKy,item,tmp) &&
+       (item.YeuCauHocKy === undefined)&&//tmp.slice(i+1,tmp.length)))
+       (tkb.length > 0 ) && uTienMonHocTruoc(tkb[tkb.length -1],item,tmp))
         {
           s = item
           s.HK = hk
           tkb_moiKy.push(item)
         }
-      }
   });
   tmp.forEach((item, i) => {
-      if((item.HK === 0) && tongSoTC(tkb_moiKy,soTinChiToiDa) && tongSoMon(tkb_moiKy,soMonHocToiDa))
-      {
-        if(kiemTraMonHocTruocVaMonTienQuyet(tkb_moiKy,item,tmp))//tmp.slice(i+1,tmp.length)))
+      if((item.HK === 0) &&
+      tongSoTC(tkb_moiKy,soTinChiToiDa) &&
+      tongSoMon(tkb_moiKy,soMonHocToiDa) &&
+      kiemTraMonHocTruocVaMonTienQuyet(tkb_moiKy,item,tmp) &&
+      (item.YeuCauHocKy === undefined))
         {
           s = item
           s.HK = hk
           tkb_moiKy.push(item)
         }
-      }
   });
-//  console.log(tkb_moiKy);
-tkb_moiKy.forEach((item, i) => {
-    if(item.HK === hk)
-    {
-      tkb_moiKy2.push(item)
-    }
-});
-
-  tkb.push(tkb_moiKy2)
+  tkb.push(tkb_moiKy)
   soHK = hk
 }
-
-// console.log(tmp[3]);
-//console.log(tkb[0]);
-// const result = await ScheduleModel.create(tkb[0]);
 return tkb
 }
 
