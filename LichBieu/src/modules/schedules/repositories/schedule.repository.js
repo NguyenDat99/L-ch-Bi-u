@@ -191,13 +191,12 @@ const createSchedule = async (subjects,data) => {
   const soMonHocToiDa =  typeof data.soMonHocToiDa !== 'undefined' ? data.soMonHocToiDa: 8
   const tyLeDaiCuong_ChuyenNganh = typeof data.tyLeDaiCuong_ChuyenNganh !== 'undefined' ? data.tyLeDaiCuong_ChuyenNganh : 0.8//tyLe DaiCuong/(ChuyenNganh+DaiCuong)
   const dungSaiChoPhepTyLeMonHoc = typeof data.dungSaiChoPhepTyLeMonHoc !== 'undefined' ? data.dungSaiChoPhepTyLeMonHoc : 0.2//dung sai voi tyLe DaiCuong/(ChuyenNganh+DaiCuong)
-  ////////////////////
-  //danh index cho mon hoc
-  const danhSachMonHocDaDanhIndex = danhIndexChoMonHoc(subjects)
-  //
+  //////////////////
   var soHK = 0
   const tkb = []
   var tongSoMontkbMoiKy = 1
+  //danh index cho mon hoc
+  const danhSachMonHocDaDanhIndex = danhIndexChoMonHoc(subjects)
   //tao tkb hoc ky 1
   const thoiKhoaBieuHKDauTien = khoiTaoTKBHocKyDau(danhSachMonHocDaDanhIndex,soTinChiToiDa,soMonHocToiDa,tyLeDaiCuong_ChuyenNganh,dungSaiChoPhepTyLeMonHoc);
   tkb.push(thoiKhoaBieuHKDauTien)
