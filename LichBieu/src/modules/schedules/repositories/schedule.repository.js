@@ -4,6 +4,13 @@ import {
   ScheduleStatus
 } from '../commons/schedule.status';
 
+function convertArrayToString(filters) {
+  let string = "";
+  filters.map(element => {
+    string += element + ' ';
+  });
+  return string;
+};
 function tongSoTC(array,max){
   var sum = 0
   array.forEach((item, i) => {
@@ -12,12 +19,10 @@ function tongSoTC(array,max){
   if (sum > max) return false
   return true
 }
-
 function tongSoMon(array,max){
   if (array.length > max) return false
   return true
 }
-
 function chiSoToiDaHocKy(subjects){
   var max = 0
   subjects.forEach((item, i) => {
@@ -44,7 +49,6 @@ function kiemTraTyLeMonHocTheoSoMonHoc(array,tyLe,dungSaiChoPhepTyLeMonHoc){
     return false
   }
 }
-
 //tyLe tcDaiCuong/(tcChuyenNganh+tcDaiCuong)
 function kiemTraTyLeMonHocTheoSoTinChi(array,tyLe,dungSaiChoPhepTyLeMonHoc){
   var daiCuong = 0
@@ -64,109 +68,54 @@ function kiemTraTyLeMonHocTheoSoTinChi(array,tyLe,dungSaiChoPhepTyLeMonHoc){
   }
 }
 function uTienMonHocTruoc(tkb_HKTruoc,monHoc,tongMonHoc){
+//   var co = 0
+//   tkb_HKTruoc.forEach((item, i) => {
+//     if((((item.MaHocPhan === monHoc.MonHocTruoc)&& (monHoc.MonHocTruoc !==undefined)) ||
+//     ((item.MaHocPhan === monHoc.MonTienQuyet)&& (monHoc.MonTienQuyet !==undefined))) &&
+//     (monHoc.TheLoaiHocPhan === "Đại Cương"))
+//     {
+//       return true
+//     }
+//   });
+//   tkb_HKTruoc.forEach((item, i) => {
+//     if(((item.MaHocPhan === monHoc.MonHocTruoc)&& (monHoc.MonHocTruoc !==undefined)) ||
+//     ((item.MaHocPhan === monHoc.MonTienQuyet)&& (monHoc.MonTienQuyet !==undefined)))
+//     {
+//       return true
+//     }
+//   });
+//   tongMonHoc.forEach((monChuaHoc, i1) => {
+//     tkb_HKTruoc.forEach((monHocTruoc, i2) => {
+//         if((monChuaHoc.HK === 0) &&
+//         (((monHocTruoc.MaHocPhan === monChuaHoc.MonHocTruoc)&& (monChuaHoc.MonHocTruoc !==undefined)) ||
+//         ((monHocTruoc.MaHocPhan === monChuaHoc.MonTienQuyet)&& (monChuaHoc.MonTienQuyet !==undefined))))
+//             co += 1
+//     });
+//   });
+//             //console.log(tkb_HKTruoc);
+// //console.log(co);
+// if(co > 0) return false
+// else return true
+}
+function kiemTraMonHocTruocVaMonTienQuyet(tkb_kyNay,monHoc,tongMonHocCoIndex){
   var co = 0
-  tkb_HKTruoc.forEach((item, i) => {
-    if((((item.MaHocPhan === monHoc.MonHocTruoc)&& (monHoc.MonHocTruoc !==undefined)) ||
-    ((item.MaHocPhan === monHoc.MonTienQuyet)&& (monHoc.MonTienQuyet !==undefined))) &&
-    (monHoc.TheLoaiHocPhan === "Đại Cương"))
-    {
-      return true
-    }
-  });
-  tkb_HKTruoc.forEach((item, i) => {
+  tkb_kyNay.forEach((item, i) => {
     if(((item.MaHocPhan === monHoc.MonHocTruoc)&& (monHoc.MonHocTruoc !==undefined)) ||
     ((item.MaHocPhan === monHoc.MonTienQuyet)&& (monHoc.MonTienQuyet !==undefined)))
-    {
-      return true
-    }
-  });
-  tongMonHoc.forEach((monChuaHoc, i1) => {
-    tkb_HKTruoc.forEach((monHocTruoc, i2) => {
-        if((monChuaHoc.HK === 0) &&
-        (((monHocTruoc.MaHocPhan === monChuaHoc.MonHocTruoc)&& (monChuaHoc.MonHocTruoc !==undefined)) ||
-        ((monHocTruoc.MaHocPhan === monChuaHoc.MonTienQuyet)&& (monChuaHoc.MonTienQuyet !==undefined))))
-            co += 1
-    });
-  });
-            //console.log(tkb_HKTruoc);
-//console.log(co);
-if(co > 0) return false
-else return true
-}
-
-
-function kiemTraMonHocTruocVaMonTienQuyet(array,subject,array2){
-  var co = 0
-  array.forEach((item, i) => {
-    if(((item.MaHocPhan === subject.MonHocTruoc)&& (subject.MonHocTruoc !==undefined)) ||
-    ((item.MaHocPhan === subject.MonTienQuyet)&& (subject.MonTienQuyet !==undefined)))
         co +=1
   });
-  array2.forEach((item, i) => {
-    if((((item.MaHocPhan === subject.MonHocTruoc)&& (subject.MonHocTruoc !==undefined)) ||
-    ((item.MaHocPhan === subject.MonTienQuyet)&& (subject.MonTienQuyet !==undefined)))
+  tongMonHocCoIndex.forEach((item, i) => {
+    if((((item.MaHocPhan === monHoc.MonHocTruoc)&& (monHoc.MonHocTruoc !==undefined)) ||
+    ((item.MaHocPhan === monHoc.MonTienQuyet)&& (monHoc.MonTienQuyet !==undefined)))
     && item.HK === 0)
           {
             co +=1
-            // console.log("sub: " + subject.MonHocTruoc);
           }
   });
   if(co <1) return true;
   return false
 }
-
-function danhSachMonHocLuaChon(tkb_HKTruoc,tongMonHoc,soTCToiDa,soMonToiDa)
-{
-//   const danhSachMonHoc = []
-//   const tkb_kyNay = []
-//   var tongTC = 0
-//   if (tkb_HKTruoc.length >0)
-// {  tkb_HKTruoc.forEach((monDaHoc, i1) => {
-//     tongSoMon.forEach((monChuaHoc, i2) => {
-//       if((((monDaHoc.MaHocPhan === monChuaHoc.MonHocTruoc)&& (monChuaHoc.MonHocTruoc !==undefined)) ||
-//       ((monDaHoc.MaHocPhan === monChuaHoc.MonTienQuyet)&& (monChuaHoc.MonTienQuyet !==undefined))) &&
-//       (monHoc.HK === 0))
-//           {
-//             danhSachMonHoc.push(monChuaHoc)
-//             tongTC += monChuaHoc.SoTinChi
-//           }
-//     });
-//   });
-// }
-// else {
-// tongSoMon.forEach((monHoc, i) => {
-//   if((i<tongSoMon+1) && (tongTC<tongSoTC+5))
-//   {
-//       danhSachMonHoc.push(monHoc)
-//       tongTC += monChuaHoc.SoTinChi
-//   }
-// });
-// }
-// if(tongTC > soTCToiDa || danhSachMonHoc.length > soMonToiDa)
-// {
-//   danhSachMonHoc.forEach((monHoc, i) => {
-//     if( tongSoTC(tkb_kyNay,soTCToiDa) &&
-//         tongSoMon(tkb_kyNay,soMonToiDa))
-//         tkb_kyNay.push(monHoc)
-//   });
-// }
-// else {
-//     tongSoMon.forEach((monHoc, i) => {
-//       if(monHoc.HK === 0)
-//           danhSachMonHoc.push(monHoc)
-//     });
-// }
-}
-
-const createSchedule = async (subjects,data) => {
-  //chi so dieu chinh
-  const soHocKyToiDa = typeof data.soHocKyToiDa !== 'undefined' ? data.soHocKyToiDa : 6
-  const tongSoTinChiDaoTao = typeof data.tongSoTinChiDaoTao !== 'undefined' ? (data.tongSoTinChiDaoTao - 10) : (154 - 10)
-  const soTinChiToiDa = Math.ceil(tongSoTinChiDaoTao/(soHocKyToiDa-1))
-  const soMonHocToiDa =  typeof data.soMonHocToiDa !== 'undefined' ? data.soMonHocToiDa: 8
-  const tyLeDaiCuong_ChuyenNganh = typeof data.tyLeDaiCuong_ChuyenNganh !== 'undefined' ? data.tyLeDaiCuong_ChuyenNganh : 0.9//tyLe DaiCuong/(ChuyenNganh+DaiCuong)
-  const dungSaiChoPhepTyLeMonHoc = typeof data.dungSaiChoPhepTyLeMonHoc !== 'undefined' ? data.dungSaiChoPhepTyLeMonHoc : 0.2//dung sai voi tyLe DaiCuong/(ChuyenNganh+DaiCuong)
-  ////////////////////
+function danhIndexChoMonHoc(subjects){
   var tmp = []
   var index = 1
   var subjects2 = []
@@ -186,10 +135,10 @@ const createSchedule = async (subjects,data) => {
   });
   subjects = subjects2
   index += 1
-// bat dau loc ra index >1
- while (subjects.length > 0 ) {
-var array1 = []
-tmp.forEach((item, i) => {
+  // bat dau loc ra index >1
+  while (subjects.length > 0 ) {
+  var array1 = []
+  tmp.forEach((item, i) => {
   var s
   //xet mon tien quyet
   subjects.forEach(function(item2, i2, object){
@@ -209,91 +158,87 @@ tmp.forEach((item, i) => {
       object.splice(i2, 1);
     }
   });
-});
-array1.forEach((item, i) => {
+  });
+  array1.forEach((item, i) => {
   tmp.push(item)
-});
-index +=1
+  });
+  index +=1
+  }
+  return tmp
 }
-//hoan thanh xap xep index bat dau tao lich dua vao tmp array
-// tong so chi <25 tong so mon < 10
-//
-const tkb=[]
-var soHK = 0
-while (soHK < soHocKyToiDa) {
-  var hk = chiSoToiDaHocKy(tmp) + 1
-  var tkb_moiKy = []
-  var s
-  tmp.forEach((item, i) => {
-    if((item.YeuCauHocKy!== undefined) &&
-    (hk === item.YeuCauHocKy))
-    {
-      s = item
-      s.HK = hk
-      tkb_moiKy.push(item)
-    }
-    else if((item.HK === 0) &&
-       tongSoTC(tkb_moiKy,soTinChiToiDa) &&
-       tongSoMon(tkb_moiKy,soMonHocToiDa) &&
-       kiemTraTyLeMonHocTheoSoMonHoc(tkb_moiKy,tyLeDaiCuong_ChuyenNganh,dungSaiChoPhepTyLeMonHoc) &&
-       kiemTraMonHocTruocVaMonTienQuyet(tkb_moiKy,item,tmp) &&
-       (item.YeuCauHocKy === undefined)&&//tmp.slice(i+1,tmp.length)))
-       (tkb.length > 0 ) && uTienMonHocTruoc(tkb[tkb.length -1],item,tmp))
-        {
-          s = item
-          s.HK = hk
-          tkb_moiKy.push(item)
-        }
+function khoiTaoTKBHocKyDau(tongMonHocCoIndex,soTCToiDa,soMonToiDa) {
+    const tkb_kyNay = []
+    tongMonHocCoIndex.forEach((monHoc, i) => {
+      if(monHoc.index === 1 && tongSoTC(tkb_kyNay,soTCToiDa) && tongSoMon(tkb_kyNay,soMonToiDa)){
+        monHoc.HK = 1
+        tkb_kyNay.push(monHoc)
+      }
+    });
+    return tkb_kyNay
+}
+function khoiTaoTKBMoiHocKy(tongMonHocCoIndex,soTCToiDa,soMonToiDa){
+  const danhSachMonHoc = []
+  const tkb_kyNay = []
+  var soHkDaDuocTao = chiSoToiDaHocKy(tongMonHocCoIndex) + 1
+  tongMonHocCoIndex.forEach((monHoc, i) => {
+      if(monHoc.HK === 0 && monHoc.index <= soHkDaDuocTao &&
+        tongSoTC(tkb_kyNay,soTCToiDa) && tongSoMon(tkb_kyNay,soMonToiDa)&&
+        kiemTraMonHocTruocVaMonTienQuyet(tkb_kyNay,monHoc,tongMonHocCoIndex))
+      {
+          monHoc.HK = soHkDaDuocTao
+          tkb_kyNay.push(monHoc)
+      }
   });
-  tmp.forEach((item, i) => {
-      if((item.HK === 0) &&
-      tongSoTC(tkb_moiKy,soTinChiToiDa) &&
-      tongSoMon(tkb_moiKy,soMonHocToiDa) &&
-      kiemTraMonHocTruocVaMonTienQuyet(tkb_moiKy,item,tmp) &&
-      (item.YeuCauHocKy === undefined))
-        {
-          s = item
-          s.HK = hk
-          tkb_moiKy.push(item)
-        }
+  tongMonHocCoIndex.forEach((monHoc, i) => {
+      if(monHoc.HK === 0 &&
+        tongSoTC(tkb_kyNay,soTCToiDa) && tongSoMon(tkb_kyNay,soMonToiDa)&&
+        kiemTraMonHocTruocVaMonTienQuyet(tkb_kyNay,monHoc,tongMonHocCoIndex))
+      {
+          monHoc.HK = soHkDaDuocTao
+          tkb_kyNay.push(monHoc)
+      }
   });
-  tkb.push(tkb_moiKy)
-  soHK = hk
+  return tkb_kyNay
+}
+const createSchedule = async (subjects,data) => {
+  const soHocKyToiDa = typeof data.soHocKyToiDa !== 'undefined' ? data.soHocKyToiDa : 6
+  const tongSoTinChiDaoTao = typeof data.tongSoTinChiDaoTao !== 'undefined' ? (data.tongSoTinChiDaoTao - 10) : (154 - 10)
+  const soTinChiToiDa = Math.ceil(tongSoTinChiDaoTao/(soHocKyToiDa-1))
+  const soMonHocToiDa =  typeof data.soMonHocToiDa !== 'undefined' ? data.soMonHocToiDa: 8
+  const tyLeDaiCuong_ChuyenNganh = typeof data.tyLeDaiCuong_ChuyenNganh !== 'undefined' ? data.tyLeDaiCuong_ChuyenNganh : 0.9//tyLe DaiCuong/(ChuyenNganh+DaiCuong)
+  const dungSaiChoPhepTyLeMonHoc = typeof data.dungSaiChoPhepTyLeMonHoc !== 'undefined' ? data.dungSaiChoPhepTyLeMonHoc : 0.2//dung sai voi tyLe DaiCuong/(ChuyenNganh+DaiCuong)
+  ////////////////////
+  //danh index cho mon hoc
+  const danhSachMonHocDaDanhIndex = danhIndexChoMonHoc(subjects)
+  //
+  var soHK = 0
+  const tkb = []
+  var tongSoMontkbMoiKy = 1
+  //tao tkb hoc ky 1
+  const thoiKhoaBieuHKDauTien = khoiTaoTKBHocKyDau(danhSachMonHocDaDanhIndex,soTinChiToiDa,soMonHocToiDa);
+  tkb.push(thoiKhoaBieuHKDauTien)
+  while (soHK < soHocKyToiDa) {
+  var tkb_moiKy = khoiTaoTKBMoiHocKy(danhSachMonHocDaDanhIndex,soTinChiToiDa,soMonHocToiDa)
+  if(tkb_moiKy.length !== 0)
+    tkb.push(tkb_moiKy)
+  soHK +=1
 }
 return tkb
 }
-
-
-
-
 const getSchedule = async (_id) => {
 
 };
 const getAllSchedules = async (page, limit) => {
 
 };
-
-
-
 const updateSchedule = async (_id, data) => {
 };
-
-function convertArrayToString(filters) {
-  let string = "";
-  filters.map(element => {
-    string += element + ' ';
-  });
-  return string;
-};
-
 const getSchedulesByFilter = async (filters) => {
   const result = await ScheduleModel.find({
     status: ScheduleStatus.UNACTIVE
   }).select(filters)
   return result;
 };
-
-
 const blockSchedule = async (_id) => {
   const result = await ScheduleModel.updateOne({
     _id,
