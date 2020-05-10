@@ -32,11 +32,12 @@ function chiSoToiDaHocKy(subjects){
   return max
 }
 //tyLe DaiCuong/(ChuyenNganh+DaiCuong)
-function kiemTraTyLeMonHocTheoSoMonHoc(array,tyLe,dungSaiChoPhepTyLeMonHoc){
+function kiemTraTyLeMonHocTheoSoMonHoc(tkb_kyNay,tyLe,dungSaiChoPhepTyLeMonHoc){
+  if(tyLe === 0) return true
   var daiCuong = 0
   var daiCuong2 = 0
   var chuyenNganh = 0
-  array.forEach((item, i) => {
+  tkb_kyNay.forEach((item, i) => {
     if(item.TheLoaiHocPhan === "Đại Cương")
         daiCuong +=1
     else if(item.TheLoaiHocPhan === "Chuyên Ngành")
@@ -50,11 +51,12 @@ function kiemTraTyLeMonHocTheoSoMonHoc(array,tyLe,dungSaiChoPhepTyLeMonHoc){
   }
 }
 //tyLe tcDaiCuong/(tcChuyenNganh+tcDaiCuong)
-function kiemTraTyLeMonHocTheoSoTinChi(array,tyLe,dungSaiChoPhepTyLeMonHoc){
+function kiemTraTyLeMonHocTheoSoTinChi(tkb_kyNay,tyLe,dungSaiChoPhepTyLeMonHoc){
+  if(tyLe === 0) return true
   var daiCuong = 0
   var daiCuong2 = 0
   var chuyenNganh = 0
-  array.forEach((item, i) => {
+  tkb_kyNay.forEach((item, i) => {
     if(item.TheLoaiHocPhan === "Đại Cương")
         daiCuong += item.SoTinChi
     else if(item.TheLoaiHocPhan === "Chuyên Ngành")
@@ -66,36 +68,6 @@ function kiemTraTyLeMonHocTheoSoTinChi(array,tyLe,dungSaiChoPhepTyLeMonHoc){
   else {
     return false
   }
-}
-function uTienMonHocTruoc(tkb_HKTruoc,monHoc,tongMonHoc){
-//   var co = 0
-//   tkb_HKTruoc.forEach((item, i) => {
-//     if((((item.MaHocPhan === monHoc.MonHocTruoc)&& (monHoc.MonHocTruoc !==undefined)) ||
-//     ((item.MaHocPhan === monHoc.MonTienQuyet)&& (monHoc.MonTienQuyet !==undefined))) &&
-//     (monHoc.TheLoaiHocPhan === "Đại Cương"))
-//     {
-//       return true
-//     }
-//   });
-//   tkb_HKTruoc.forEach((item, i) => {
-//     if(((item.MaHocPhan === monHoc.MonHocTruoc)&& (monHoc.MonHocTruoc !==undefined)) ||
-//     ((item.MaHocPhan === monHoc.MonTienQuyet)&& (monHoc.MonTienQuyet !==undefined)))
-//     {
-//       return true
-//     }
-//   });
-//   tongMonHoc.forEach((monChuaHoc, i1) => {
-//     tkb_HKTruoc.forEach((monHocTruoc, i2) => {
-//         if((monChuaHoc.HK === 0) &&
-//         (((monHocTruoc.MaHocPhan === monChuaHoc.MonHocTruoc)&& (monChuaHoc.MonHocTruoc !==undefined)) ||
-//         ((monHocTruoc.MaHocPhan === monChuaHoc.MonTienQuyet)&& (monChuaHoc.MonTienQuyet !==undefined))))
-//             co += 1
-//     });
-//   });
-//             //console.log(tkb_HKTruoc);
-// //console.log(co);
-// if(co > 0) return false
-// else return true
 }
 function kiemTraMonHocTruocVaMonTienQuyet(tkb_kyNay,monHoc,tongMonHocCoIndex){
   var co = 0
@@ -166,24 +138,36 @@ function danhIndexChoMonHoc(subjects){
   }
   return tmp
 }
-function khoiTaoTKBHocKyDau(tongMonHocCoIndex,soTCToiDa,soMonToiDa) {
+function khoiTaoTKBHocKyDau(tongMonHocCoIndex,soTCToiDa,soMonToiDa,tyLe,dungSaiChoPhepTyLeMonHoc) {
     const tkb_kyNay = []
     tongMonHocCoIndex.forEach((monHoc, i) => {
-      if(monHoc.index === 1 && tongSoTC(tkb_kyNay,soTCToiDa) && tongSoMon(tkb_kyNay,soMonToiDa)){
+      if(monHoc.index === 1 && tongSoTC(tkb_kyNay,soTCToiDa) &&
+       tongSoMon(tkb_kyNay,soMonToiDa) &&
+       kiemTraTyLeMonHocTheoSoTinChi(tkb_kyNay,tyLe,dungSaiChoPhepTyLeMonHoc)){
         monHoc.HK = 1
         tkb_kyNay.push(monHoc)
       }
     });
+    tongMonHocCoIndex.forEach((monHoc, i) => {
+        if(monHoc.HK === 0 &&
+          tongSoTC(tkb_kyNay,soTCToiDa) && tongSoMon(tkb_kyNay,soMonToiDa)&&
+          kiemTraMonHocTruocVaMonTienQuyet(tkb_kyNay,monHoc,tongMonHocCoIndex))
+        {
+            monHoc.HK = 1
+            tkb_kyNay.push(monHoc)
+        }
+    });
     return tkb_kyNay
 }
-function khoiTaoTKBMoiHocKy(tongMonHocCoIndex,soTCToiDa,soMonToiDa){
+function khoiTaoTKBMoiHocKy(tongMonHocCoIndex,soTCToiDa,soMonToiDa,tyLe,dungSaiChoPhepTyLeMonHoc){
   const danhSachMonHoc = []
   const tkb_kyNay = []
   var soHkDaDuocTao = chiSoToiDaHocKy(tongMonHocCoIndex) + 1
   tongMonHocCoIndex.forEach((monHoc, i) => {
       if(monHoc.HK === 0 && monHoc.index <= soHkDaDuocTao &&
         tongSoTC(tkb_kyNay,soTCToiDa) && tongSoMon(tkb_kyNay,soMonToiDa)&&
-        kiemTraMonHocTruocVaMonTienQuyet(tkb_kyNay,monHoc,tongMonHocCoIndex))
+        kiemTraMonHocTruocVaMonTienQuyet(tkb_kyNay,monHoc,tongMonHocCoIndex) &&
+        kiemTraTyLeMonHocTheoSoTinChi(tkb_kyNay,tyLe,dungSaiChoPhepTyLeMonHoc))
       {
           monHoc.HK = soHkDaDuocTao
           tkb_kyNay.push(monHoc)
@@ -205,7 +189,7 @@ const createSchedule = async (subjects,data) => {
   const tongSoTinChiDaoTao = typeof data.tongSoTinChiDaoTao !== 'undefined' ? (data.tongSoTinChiDaoTao - 10) : (154 - 10)
   const soTinChiToiDa = Math.ceil(tongSoTinChiDaoTao/(soHocKyToiDa-1))
   const soMonHocToiDa =  typeof data.soMonHocToiDa !== 'undefined' ? data.soMonHocToiDa: 8
-  const tyLeDaiCuong_ChuyenNganh = typeof data.tyLeDaiCuong_ChuyenNganh !== 'undefined' ? data.tyLeDaiCuong_ChuyenNganh : 0.9//tyLe DaiCuong/(ChuyenNganh+DaiCuong)
+  const tyLeDaiCuong_ChuyenNganh = typeof data.tyLeDaiCuong_ChuyenNganh !== 'undefined' ? data.tyLeDaiCuong_ChuyenNganh : 0.8//tyLe DaiCuong/(ChuyenNganh+DaiCuong)
   const dungSaiChoPhepTyLeMonHoc = typeof data.dungSaiChoPhepTyLeMonHoc !== 'undefined' ? data.dungSaiChoPhepTyLeMonHoc : 0.2//dung sai voi tyLe DaiCuong/(ChuyenNganh+DaiCuong)
   ////////////////////
   //danh index cho mon hoc
@@ -215,10 +199,10 @@ const createSchedule = async (subjects,data) => {
   const tkb = []
   var tongSoMontkbMoiKy = 1
   //tao tkb hoc ky 1
-  const thoiKhoaBieuHKDauTien = khoiTaoTKBHocKyDau(danhSachMonHocDaDanhIndex,soTinChiToiDa,soMonHocToiDa);
+  const thoiKhoaBieuHKDauTien = khoiTaoTKBHocKyDau(danhSachMonHocDaDanhIndex,soTinChiToiDa,soMonHocToiDa,tyLeDaiCuong_ChuyenNganh,dungSaiChoPhepTyLeMonHoc);
   tkb.push(thoiKhoaBieuHKDauTien)
   while (soHK < soHocKyToiDa) {
-  var tkb_moiKy = khoiTaoTKBMoiHocKy(danhSachMonHocDaDanhIndex,soTinChiToiDa,soMonHocToiDa)
+  var tkb_moiKy = khoiTaoTKBMoiHocKy(danhSachMonHocDaDanhIndex,soTinChiToiDa,soMonHocToiDa,tyLeDaiCuong_ChuyenNganh,dungSaiChoPhepTyLeMonHoc)
   if(tkb_moiKy.length !== 0)
     tkb.push(tkb_moiKy)
   soHK +=1
