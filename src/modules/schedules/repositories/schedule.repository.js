@@ -1,5 +1,5 @@
 import ScheduleModel from '../models/schedule.models';
-import TreeNodeModel  from '../../utility/models/treenode.models';
+//import TreeNodeModel  from '../../utility/models/treenode.models';
 import {
   ScheduleStatus
 } from '../commons/schedule.status';
@@ -189,7 +189,7 @@ const createSchedule = async (subjects,data) => {
   const tongSoTinChiDaoTao = typeof data.tongSoTinChiDaoTao !== 'undefined' ? (data.tongSoTinChiDaoTao - 10) : (154 - 10)
   const soTinChiToiDa = Math.ceil(tongSoTinChiDaoTao/(soHocKyToiDa-1))
   const soMonHocToiDa =  typeof data.soMonHocToiDa !== 'undefined' ? data.soMonHocToiDa: 8
-  const tyLeDaiCuong_ChuyenNganh = typeof data.tyLeDaiCuong_ChuyenNganh !== 'undefined' ? data.tyLeDaiCuong_ChuyenNganh : 0.8//tyLe DaiCuong/(ChuyenNganh+DaiCuong)
+  const tyLeDaiCuong_ChuyenNganh = typeof data.tyLeDaiCuong_ChuyenNganh !== 'undefined' ? data.tyLeDaiCuong_ChuyenNganh : 0//tyLe DaiCuong/(ChuyenNganh+DaiCuong)
   const dungSaiChoPhepTyLeMonHoc = typeof data.dungSaiChoPhepTyLeMonHoc !== 'undefined' ? data.dungSaiChoPhepTyLeMonHoc : 0.2//dung sai voi tyLe DaiCuong/(ChuyenNganh+DaiCuong)
   //////////////////
   var soHK = 0
@@ -206,13 +206,28 @@ const createSchedule = async (subjects,data) => {
     tkb.push(tkb_moiKy)
   soHK +=1
 }
+  tkb.forEach((hocKy, i) => {
+    hocKy.forEach((monHoc, i) => {
+    const result =  ScheduleModel.create(monHoc);
+    });
+  });
 return tkb
 }
-const getSchedule = async (_id) => {
-
+const getSchedule = async (hocKy) => {
+  var schedules = await ScheduleModel.find({
+    HK: hocKy,
+    TrangThaiMonHoc: ScheduleStatus.ACTIVE
+  });
+return schedules
 };
 const getAllSchedules = async (page, limit) => {
-
+  var schedules = await ScheduleModel
+    .find({
+      TrangThaiMonHoc: ScheduleStatus.ACTIVE
+    })
+    .limit(limit)
+    .skip(limit * page);
+  return schedules;
 };
 const updateSchedule = async (_id, data) => {
 };
@@ -232,7 +247,6 @@ const blockSchedule = async (_id) => {
   if (result.n === result.nModified) return true;
   return false;
 };
-
 export default {
   createSchedule,
   getSchedule,

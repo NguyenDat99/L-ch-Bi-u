@@ -47,12 +47,12 @@ const getAllScheduleInputByScheduleId = (req, res, next) => {
 };
 
 const getScheduleInput = (req, res, next) => {
-    const { jwt } = req.headers;
-    const scheduleId = req.params.scheduleId;
+    // const { jwt } = req.headers;
+    // const scheduleId = req.params.scheduleId;
     try {
-        if (!jwt) throw GetScheduleErrors.NO_TOKEN;
-        if (!scheduleId) throw GetScheduleErrors.NO_PRODUCT_ID;
-        if (!Validator.isMongoId(scheduleId)) throw GetScheduleErrors.INVALID_PRODUCT_ID;
+        // if (!jwt) throw GetScheduleErrors.NO_TOKEN;
+        // if (!scheduleId) throw GetScheduleErrors.NO_PRODUCT_ID;
+    //    if (!Validator.isMongoId(scheduleId)) throw GetScheduleErrors.INVALID_PRODUCT_ID;
         return next();
     } catch (error) {
         return res.onError(new ValidationError(error));
