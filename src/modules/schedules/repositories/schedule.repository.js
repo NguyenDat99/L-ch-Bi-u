@@ -206,53 +206,46 @@ const createSchedule = async (subjects,data) => {
     tkb.push(tkb_moiKy)
   soHK +=1
 }
-  tkb.forEach((hocKy, i) => {
-    hocKy.forEach((monHoc, i) => {
-    const result =  ScheduleModel.create(monHoc);
-    });
-  });
+  // tkb.forEach((hocKy, i) => {
+  //   hocKy.forEach((monHoc, i) => {
+  //   const result =  ScheduleModel.create(monHoc);
+  //   });
+  // });
 return tkb
 }
-const getSchedule = async (hocKy) => {
+const getSchedule = async (MaKhoa,hocKy) => {
   var schedules = await ScheduleModel.find({
-    HK: hocKy,
-    TrangThaiMonHoc: ScheduleStatus.ACTIVE
+    MaKhoa: MaKhoa
   });
-return schedules
+return schedules[hocKy]
 };
 const getAllSchedules = async (page, limit) => {
   var schedules = await ScheduleModel
     .find({
-      TrangThaiMonHoc: ScheduleStatus.ACTIVE
+        MaKhoa: MaKhoa
     })
     .limit(limit)
     .skip(limit * page);
   return schedules;
 };
-const updateSchedule = async (_id, data) => {
-};
-const getSchedulesByFilter = async (filters) => {
-  const result = await ScheduleModel.find({
-    status: ScheduleStatus.UNACTIVE
-  }).select(filters)
-  return result;
-};
-const blockSchedule = async (_id) => {
+const insertSchedule = async (data) => {
+  const result = await ScheduleModel.create(data);
+}
+
+const updateSchedule = async (MaKhoa, data) => {
   const result = await ScheduleModel.updateOne({
-    _id,
-    status: ScheduleStatus.ACTIVE
-  }, {
-    status: ScheduleStatus.UNACTIVE
-  });
-  if (result.n === result.nModified) return true;
-  return false;
+    MaKhoa: MaKhoa
+},
+    { ...data });
+if (result.n === result.nModified) return true;
+return false;
 };
+
 export default {
   createSchedule,
   getSchedule,
   getAllSchedules,
   updateSchedule,
   convertArrayToString,
-  getSchedulesByFilter,
-  blockSchedule
+  insertSchedule
 };

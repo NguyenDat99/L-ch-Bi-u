@@ -7,52 +7,12 @@ import {
 
 
 const ScheduleSchema = new Schema({
-  MaHocPhan: {
-      type: String,
-      required: true
-  },
-  TenHocPhan: {
-      type: String,
-      required: true
-  },
-  LoaiHocPhan: {
-      type: String,
-      required: true
-  },
-  TheLoaiHocPhan: {
-      type: String,
-      required: true
-  },
-  SoTinChi: {
-      type: Number,
-      required: true
-  },
-  MonTienQuyet: {
-      type: String
-  },
-  MonHocTruoc: {
-      type: String
-  },
-  TrangThaiMonHoc: {
-      type: String
-  },
-  YeuCauHocKy:{
-    type: Number
-  }
-  ,
   MaKhoa: {
       type: String,
       required: true,
       MaChuyenNganh: String
   },
-  HK:{
-    type: Number
-  },
-  index:{
-    type: Number
-  }
-  ,
-  thuocTinhPhu: {}
+  thoiKhoaBieu: {}
 }, {
   versionKey: false,
   timestamps: true,

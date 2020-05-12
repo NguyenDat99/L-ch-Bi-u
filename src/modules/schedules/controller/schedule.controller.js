@@ -59,7 +59,7 @@ const getSchedule = async (req, res) => {
   if(parsedUrl.path[10] < '9' && parsedUrl.path[10] >'1')
     { hocKy = parseInt(parsedUrl.path[10])}
   try {
-    const schedule = await ScheduleRepository.getSchedule(hocKy);
+    const schedule = await ScheduleRepository.getSchedule(data.MaKhoa,hocKy);
     if (!schedule) throw new NotImplementError(CreateScheduleErrors.CREATE_FAIL);
     return res.onSuccess(schedule);
   } catch (error) {
