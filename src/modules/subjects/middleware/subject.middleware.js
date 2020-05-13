@@ -27,9 +27,9 @@ const createSubjectInput = (req, res, next) => {
 };
 
 const getAllSubjectInput = (req, res, next) => {
-    const { jwt } = req.headers;
+  //  const { jwt } = req.headers;
     try {
-      if (!jwt) throw GetSubjectsErrors.NO_TOKEN;
+    //  if (!jwt) throw GetSubjectsErrors.NO_TOKEN;
         return next();
     } catch (error) {
         return res.onError(new ValidationError(error));
@@ -37,7 +37,7 @@ const getAllSubjectInput = (req, res, next) => {
 };
 
 const getAllSubjectInputBy_SoTinChi = (req, res, next) => {
-    const { jwt } = req.headers;
+  //  const { jwt } = req.headers;
     const data = req.body;
     try {
         if (!jwt) throw GetSubjectsErrors.NO_TOKEN;
@@ -49,11 +49,11 @@ const getAllSubjectInputBy_SoTinChi = (req, res, next) => {
 };
 
 const getSubjectInput = (req, res, next) => {
-    const { jwt } = req.headers;
-    const subjectId = req.params.subjectId;
+//    const { jwt } = req.headers;
+//    const subjectId = req.params.subjectId;
     try {
-        if (!jwt) throw GetSubjectErrors.NO_TOKEN;
-        if (!data.MaHocPhan) throw CreateSubjectErrors.NO_MAHOCPHAN;
+  //      if (!jwt) throw GetSubjectErrors.NO_TOKEN;
+  //      if (!data.MaHocPhan) throw CreateSubjectErrors.NO_MAHOCPHAN;
         return next();
     } catch (error) {
         return res.onError(new ValidationError(error));

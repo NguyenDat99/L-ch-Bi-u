@@ -12,7 +12,7 @@ const createSubject = async (data) => {
 const getSubject = async (MaHocPhan) => {
   var subject = await SubjectModel.findOne({
     MaHocPhan,
-    status: SubjectStatus.ACTIVE
+    TrangThaiMonHoc: SubjectStatus.ACTIVE
   });
 return subject
 };

@@ -49,14 +49,14 @@ const createSubject = async (req, res) => {
 
 
 const getAllSubjects = async (req, res) => {
-    const { jwt } = req.headers;
+//    const { jwt } = req.headers;
     let parsedUrl = url.parse(req.url);
     let parsedQs = querystring.parse(parsedUrl.query);
     const page = parsedQs.page
     const limit = parsedQs.limit
     try {
-        const authenData = VerifyToken(jwt);
-        if (!authenData) throw new NotImplementError(GetSubjectsErrors.AUTH_FAIL);
+  //      const authenData = VerifyToken(jwt);
+    //    if (!authenData) throw new NotImplementError(GetSubjectsErrors.AUTH_FAIL);
         // if (authenData.role !== AccountRole.TEACHER) {
         //     throw new Unauthorized(GetSubjectsErrors.NO_RIGHT);
         // }
@@ -80,15 +80,15 @@ const getAllSubjectsForSchedule = async (req,res) => {
 };
 
 const getAllSubjectInputBy_SoTinChi = async (req, res) => {
-    const { jwt } = req.headers;
+    // const { jwt } = req.headers;
     let parsedUrl = url.parse(req.url);
     let parsedQs = querystring.parse(parsedUrl.query);
     const page = parsedQs.page
     const limit = parsedQs.limit
     const data = req.body;
     try {
-        const authenData = VerifyToken(jwt);
-        if (!authenData) throw new NotImplementError(GetSubjectsErrors.AUTH_FAIL);
+        // const authenData = VerifyToken(jwt);
+        // if (!authenData) throw new NotImplementError(GetSubjectsErrors.AUTH_FAIL);
         // if (authenData.role !== AccountRole.MANAGER) {
         //     throw new Unauthorized(GetSubjectsErrors.NO_RIGHT);
         // }
@@ -102,19 +102,18 @@ const getAllSubjectInputBy_SoTinChi = async (req, res) => {
 
 
 const getSubject = async (req, res) => {
-    const { jwt } = req.headers;
-    const MaHocPhan = req.params.MaHocPhan;
-
-    let parsedUrl = url.parse(req.url);
-    let parsedQs = querystring.parse(parsedUrl.query);
+  //  const { jwt } = req.headers;
+    let parsedUrl = url.parse(req.url).path;
+    const MaHocPhan = parsedUrl.slice(9,parsedUrl.length);
+    console.log(MaHocPhan);
     try {
-        const authenData = VerifyToken(jwt);
-        if (!authenData) throw new NotImplementError(GetSubjectErrors.AUTH_FAIL);
+        // const authenData = VerifyToken(jwt);
+        // if (!authenData) throw new NotImplementError(GetSubjectErrors.AUTH_FAIL);
         // if (authenData.role !== AccountRole.MANAGER) {
         //     throw new Unauthorized(GetSubjectErrors.NO_RIGHT);
         // }
-        const subject = await SubjectRepository.getSubject(MaHocPhan);
-        if (!subject) throw new NotFoundError(GetSubjectErrors.GET_FAIL);
+       const subject = await SubjectRepository.getSubject(MaHocPhan);
+       if (!subject) throw new NotFoundError(GetSubjectErrors.GET_FAIL);
         return res.onSuccess(subject);
     } catch (error) {
         return res.onError(error);
