@@ -31,9 +31,10 @@ const querystring = require('querystring');
 const createSchedule = async (req, res) => {
   const data = req.body;
   try {
-    const subjects =  await SubjectController.getAllSubjectsForSchedule(req,res);
-    const schedule = await ScheduleRepository.createSchedule(subjects,data);
-    if (!schedule) throw new NotImplementError(CreateScheduleErrors.CREATE_FAIL);
+    // const subjects =  await SubjectController.getAllSubjectsForSchedule(req,res);
+    // const schedule = await ScheduleRepository.createSchedule(subjects,data);
+      const schedule = await ScheduleRepository.createSchedule(data);
+    // if (!schedule) throw new NotImplementError(CreateScheduleErrors.CREATE_FAIL);
     return res.onSuccess(schedule);
   } catch (error) {
       return res.onError(error);

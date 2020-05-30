@@ -184,34 +184,38 @@ function khoiTaoTKBMoiHocKy(tongMonHocCoIndex,soTCToiDa,soMonToiDa,tyLe,dungSaiC
   });
   return tkb_kyNay
 }
-const createSchedule = async (subjects,data) => {
-  const soHocKyToiDa = typeof data.soHocKyToiDa !== 'undefined' ? data.soHocKyToiDa : 6
-  const tongSoTinChiDaoTao = typeof data.tongSoTinChiDaoTao !== 'undefined' ? (data.tongSoTinChiDaoTao - 10) : (154 - 10)
-  const soTinChiToiDa = Math.ceil(tongSoTinChiDaoTao/(soHocKyToiDa-1))
-  const soMonHocToiDa =  typeof data.soMonHocToiDa !== 'undefined' ? data.soMonHocToiDa: 8
-  const tyLeDaiCuong_ChuyenNganh = typeof data.tyLeDaiCuong_ChuyenNganh !== 'undefined' ? data.tyLeDaiCuong_ChuyenNganh : 0//tyLe DaiCuong/(ChuyenNganh+DaiCuong)
-  const dungSaiChoPhepTyLeMonHoc = typeof data.dungSaiChoPhepTyLeMonHoc !== 'undefined' ? data.dungSaiChoPhepTyLeMonHoc : 0.2//dung sai voi tyLe DaiCuong/(ChuyenNganh+DaiCuong)
-  //////////////////
-  var soHK = 0
-  const tkb = []
-  var tongSoMontkbMoiKy = 1
-  //danh index cho mon hoc
-  const danhSachMonHocDaDanhIndex = danhIndexChoMonHoc(subjects)
-  //tao tkb hoc ky 1
-  const thoiKhoaBieuHKDauTien = khoiTaoTKBHocKyDau(danhSachMonHocDaDanhIndex,soTinChiToiDa,soMonHocToiDa,tyLeDaiCuong_ChuyenNganh,dungSaiChoPhepTyLeMonHoc);
-  tkb.push(thoiKhoaBieuHKDauTien)
-  while (soHK < soHocKyToiDa) {
-  var tkb_moiKy = khoiTaoTKBMoiHocKy(danhSachMonHocDaDanhIndex,soTinChiToiDa,soMonHocToiDa,tyLeDaiCuong_ChuyenNganh,dungSaiChoPhepTyLeMonHoc)
-  if(tkb_moiKy.length !== 0)
-    tkb.push(tkb_moiKy)
-  soHK +=1
-}
-  // tkb.forEach((hocKy, i) => {
-  //   hocKy.forEach((monHoc, i) => {
-  //   const result =  ScheduleModel.create(monHoc);
-  //   });
-  // });
-return tkb
+// const createSchedule = async (subjects,data) => {
+//   const soHocKyToiDa = typeof data.soHocKyToiDa !== 'undefined' ? data.soHocKyToiDa : 6
+//   const tongSoTinChiDaoTao = typeof data.tongSoTinChiDaoTao !== 'undefined' ? (data.tongSoTinChiDaoTao - 10) : (154 - 10)
+//   const soTinChiToiDa = Math.ceil(tongSoTinChiDaoTao/(soHocKyToiDa-1))
+//   const soMonHocToiDa =  typeof data.soMonHocToiDa !== 'undefined' ? data.soMonHocToiDa: 8
+//   const tyLeDaiCuong_ChuyenNganh = typeof data.tyLeDaiCuong_ChuyenNganh !== 'undefined' ? data.tyLeDaiCuong_ChuyenNganh : 0//tyLe DaiCuong/(ChuyenNganh+DaiCuong)
+//   const dungSaiChoPhepTyLeMonHoc = typeof data.dungSaiChoPhepTyLeMonHoc !== 'undefined' ? data.dungSaiChoPhepTyLeMonHoc : 0.2//dung sai voi tyLe DaiCuong/(ChuyenNganh+DaiCuong)
+//   //////////////////
+//   var soHK = 0
+//   const tkb = []
+//   var tongSoMontkbMoiKy = 1
+//   //danh index cho mon hoc
+//   const danhSachMonHocDaDanhIndex = danhIndexChoMonHoc(subjects)
+//   //tao tkb hoc ky 1
+//   const thoiKhoaBieuHKDauTien = khoiTaoTKBHocKyDau(danhSachMonHocDaDanhIndex,soTinChiToiDa,soMonHocToiDa,tyLeDaiCuong_ChuyenNganh,dungSaiChoPhepTyLeMonHoc);
+//   tkb.push(thoiKhoaBieuHKDauTien)
+//   while (soHK < soHocKyToiDa) {
+//   var tkb_moiKy = khoiTaoTKBMoiHocKy(danhSachMonHocDaDanhIndex,soTinChiToiDa,soMonHocToiDa,tyLeDaiCuong_ChuyenNganh,dungSaiChoPhepTyLeMonHoc)
+//   if(tkb_moiKy.length !== 0)
+//     tkb.push(tkb_moiKy)
+//   soHK +=1
+// }
+//   // tkb.forEach((hocKy, i) => {
+//   //   hocKy.forEach((monHoc, i) => {
+//   //   const result =  ScheduleModel.create(monHoc);
+//   //   });
+//   // });
+// return tkb
+// }
+const createSchedule = async (data) => {
+  const result = await ScheduleModel.create(data);
+  return result;
 }
 const getSchedule = async (MaKhoa,hocKy) => {
   var schedules = await ScheduleModel.find({

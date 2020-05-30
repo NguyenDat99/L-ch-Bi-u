@@ -42,9 +42,7 @@ const SubjectSchema = new Schema({
     }
     ,
     MaKhoa: {
-        type: String,
-        required: true,
-        MaChuyenNganh: String
+        type: String
     }
     ,
     thuocTinhPhu: {}
