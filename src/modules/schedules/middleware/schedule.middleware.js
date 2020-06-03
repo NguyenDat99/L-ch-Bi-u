@@ -24,9 +24,9 @@ const createScheduleInput = (req, res, next) => {
 };
 
 const getAllScheduleInput = (req, res, next) => {
-    const { jwt } = req.headers;
+  //  const { jwt } = req.headers;
     try {
-        if (!jwt) throw GetSchedulesErrors.NO_TOKEN;
+        // if (!jwt) throw GetSchedulesErrors.NO_TOKEN;
         return next();
     } catch (error) {
         return res.onError(new ValidationError(error));
@@ -60,14 +60,14 @@ const getScheduleInput = (req, res, next) => {
 };
 
 const updateScheduleInput = (req, res, next) => {
-    const { jwt } = req.headers;
+  //  const { jwt } = req.headers;
     const data= req.body;
-    const scheduleId = req.params.scheduleId;
+  //  const scheduleId = req.params.scheduleId;
     try {
         if (!data) throw UpdateScheduleErrors.NO_DATA;
-        if (!jwt) throw UpdateScheduleErrors.NO_TOKEN;
-        if (!scheduleId) throw UpdateScheduleErrors.NO_PRODUCT_ID;
-        if (!Validator.isMongoId(scheduleId)) throw UpdateScheduleErrors.INVALID_PRODUCT_ID;
+        // if (!jwt) throw UpdateScheduleErrors.NO_TOKEN;
+        // if (!scheduleId) throw UpdateScheduleErrors.NO_PRODUCT_ID;
+//        if (!Validator.isMongoId(scheduleId)) throw UpdateScheduleErrors.INVALID_PRODUCT_ID;
         return next();
     } catch (error) {
         return res.onError(new ValidationError(error));

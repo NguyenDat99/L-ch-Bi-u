@@ -54,13 +54,10 @@ const getAllSchedules = async (req, res) =>{
   }
 };
 const getSchedule = async (req, res) => {
-  const data = req.body;
   let parsedUrl = url.parse(req.url);
-  var hocKy = 1
-  if(parsedUrl.path[10] < '9' && parsedUrl.path[10] >'1')
-    { hocKy = parseInt(parsedUrl.path[10])}
+  var maKhoa = parsedUrl.path.substr(10,11)
   try {
-    const schedule = await ScheduleRepository.getSchedule(data.MaKhoa,hocKy);
+    const schedule = await ScheduleRepository.getSchedule(maKhoa);
     if (!schedule) throw new NotImplementError(CreateScheduleErrors.CREATE_FAIL);
     return res.onSuccess(schedule);
   } catch (error) {
@@ -69,7 +66,16 @@ const getSchedule = async (req, res) => {
 };
 
 const updateSchedule = async (req, res) => {
-
+  const data = req.body;
+  let parsedUrl = url.parse(req.url);
+  var maKhoa = parsedUrl.path.substr(10,11)
+  try {
+    const schedule = await ScheduleRepository.getSchedule(maKhoa);
+    if (!schedule) throw new NotImplementError(CreateScheduleErrors.CREATE_FAIL);
+    return res.onSuccess(schedule);
+  } catch (error) {
+      return res.onError(error);
+  }
 };
 
 

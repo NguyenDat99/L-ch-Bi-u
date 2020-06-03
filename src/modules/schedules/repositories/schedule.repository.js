@@ -217,17 +217,15 @@ const createSchedule = async (data) => {
   const result = await ScheduleModel.create(data);
   return result;
 }
-const getSchedule = async (MaKhoa,hocKy) => {
+const getSchedule = async (MaKhoa) => {
   var schedules = await ScheduleModel.find({
     MaKhoa: MaKhoa
   });
-return schedules[hocKy]
+return schedules
 };
 const getAllSchedules = async (page, limit) => {
   var schedules = await ScheduleModel
-    .find({
-        MaKhoa: MaKhoa
-    })
+    .find()
     .limit(limit)
     .skip(limit * page);
   return schedules;
