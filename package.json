@@ -48,6 +48,6 @@
     "cross-env": "^5.2.0",
     "eslint-config-airbnb-base": "^13.0.0",
     "eslint-plugin-import": "^2.13.0",
-    "nodemon": "^1.19.4"
+    "nodemon": "^2.0.20"
   }
 }
